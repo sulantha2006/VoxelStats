@@ -1,6 +1,0 @@
-/* ----------------------------------------------------------------------------
-@NAME       : ntrapz
-@DESCRIPTION: Performs trapezoidal integration over a data set.
-@TYPE       : CMEX file to be dynamically linked by MATLAB
-@LIBRARIES  : EMMA
----------------------------------------------------------------------------- */

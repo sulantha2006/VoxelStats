@@ -1,3 +1,0 @@
-#!/bin/csh
-cd $1
-awk '$1 == "#define" {print $2 " = " $3 ";"}' < mierrors.h > mierrors.m

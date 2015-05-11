@@ -1,6 +1,0 @@
-/* ----------------------------------------------------------------------------
-@NAME       : lookup
-@DESCRIPTION: Performs a linear interpolation to do a table lookup.
-@TYPE       : CMEX file to be dynamically linked by MATLAB
-@LIBRARIES  : EMMA
----------------------------------------------------------------------------- */

@@ -1,9 +1,0 @@
-/* ----------------------------------------------------------------------------
-@NAME       : micreatedim
-@DESCRIPTION: Creates a dimension in the specified MINC file of the specified
-              length.
-@TYPE       : Stand-alone executable.
-@LIBRARIES  : netCDF
-              MINC
----------------------------------------------------------------------------- */
-

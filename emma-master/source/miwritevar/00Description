@@ -1,7 +1,0 @@
-/* ----------------------------------------------------------------------------
-@NAME       : miwritevar
-@DESCRIPTION: Writes values to a variable in a netCDF file.
-@TYPE       : Stand-alone executable.
-@LIBRARIES  : netCDF
-              MINC
----------------------------------------------------------------------------- */
