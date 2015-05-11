@@ -20,4 +20,6 @@ This program will let you run voxelwise generalized linear modeling with MINC2 f
 Currently this is distributed under GNU public license with no warranty but I would love to support for an issue as my time permits. Please acknowledge this repository in your documents. 
 This utilizes any parellel profiles setup in your MATLAB. 
 
-Also, I have added the EMMA toolbox by BIC-MNI, McGill University that is the interface between MATLAB and MINC files. This program requires minc-toolkit installed in your computer. Acknowledgement to developers of EMMA toolbox in BIC-MNI. 
+Package requirements : 
+MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
+EMMA Toolkit - https://github.com/BIC-MNI/emma
