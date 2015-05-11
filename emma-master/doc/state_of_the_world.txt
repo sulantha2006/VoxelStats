@@ -1,0 +1,100 @@
+Work has been continuing on speeding up blood delay correction.  It
+currently takes about 70% of the time required to analyze one slice.
+A faster curve fitting routine was desired, as spending this amount of
+time on this task was deemed unreasonable.  I explored a few different
+curve fitting routines, from Numerical Recipes, SLATEC, and CEPHES.  I
+could not get any of them working satisfactorily.
+
+It came to me finally that we were already using a routine that was
+stable with our data: the MATLAB fmins function.  Therefore, I set out
+to redo this function in C, hoping for a significant speed increase.
+A speed increase of about 20 times was observed in the minimization
+function itself, when minimizing a simple function like cosine.
+Unfortunately, when this faster fitting routine was applied to blood
+delay correction, it was found that the evaluation of the blood curve
+was so slow, and was performed so many times (about 200 times/fit),
+that there was no significant speed increase.  There were therefore
+only two options left: increase the speed of the blood curve function,
+or reduce the number of function calls necessary to find the minimum.
+
+I increased the speed of evaluation of the blood curve function by
+coding it entirely in C.  I then created a blood delay correction
+function in C, which contains the curve fitting algorithm as well as
+the blood curve function.  This finally produced a significant
+increase in speed, almost halving the time required for analysis.
+At this time, this is the version which is installed.
+
+I played around with the routines available in the MATLAB optimization
+package for least squares fitting, trying to find a stable routine
+that required fewer function evaluations.  The Levenberg-Marquart
+routines didn't work for any set of final tolerances that I tried,
+always heading off into never-never land at some point.  The
+Gauss-Newton method provided slightly more reliable results.  However,
+I noticed that for some fits, it would only perform about nine
+function evaluations, and then return the same parameters as the
+previous fit.  Obviously, this makes no sense, and calls into question
+the entire fitting.  Oh well.
+
+Here's what Greg has been up to (in his own words):
+
+---------------------------------------------------
+
+OK, here's the scoop:
+
+micreateimage now creates a MINC file, creates the image dimensions,
+and copies dimension/width variables and (possibly) their values.
+This last one is the biggy, and I've just about got it licked.
+All that remains is to write a routine to copy all variable definitions
+except the special ones (ie. dimension variables, dimension width 
+variables, and image variables), and then another to create the
+image variables.  Most of the code already exists in various places,
+I just have to shuffle it around.
+
+	Greg
+
+
+To satisfy your no doubt morbid curiosity, here's why the copying
+of dimension/width variables is such a bugaboo:
+
+   /* 
+    * Now we either copy or create the NumDim dimension variables.
+    * We loop through the dimensions in the *child* file, and for
+    * each one, we must:
+    *    - find a variable in the parent file with the same name as
+    *      the name of the current dimension;
+    *    - if this variable does not exist in the parent file (ie.
+    *      it's missing one of the dimension variables or possibly
+    *      it doesn't even have that dimension), we will simply create
+    *      a standard dimension variable in the child file
+    *    - if the parent file does have the appropriate dimension
+    *      variable, we get its type and list of subscripted dimensions
+    *    - if it does not depend on any dimensions, we simply copy 
+    *      the entire variable definition using micopy_var_def
+    *    - if it depends on exactly one dimension, we:
+    *      - read in the name and length of that dimension
+    *      - compare the name to the name of the variable (which is just
+    *        the name of the current dimension in the child file); if
+    *        they are not the same, we fail - set an error message and
+    *        return false
+    *      - get the length of the current dimension in the child file
+    *        - if it's the same as the dimension in the parent file,
+    *          we just copy the variable definition set a flag to 
+    *          tell us to copy the variable values (eventually)
+    *        - if it's not the same, we create a standard dimension 
+    *          variable subscripted just by the current dimension
+    *          (but with no defined values)
+    * Note: most of this mess has been shoved into CopyDimVar().
+    */
+
+(more or less...)
+
+	Greg
+
+-----------------------------------------------
+
+So, that's the current state of the world.
+
+
+Mark.
+
+

@@ -1,0 +1,9 @@
+/* ----------------------------------------------------------------------------
+@NAME       : micreatevar
+@DESCRIPTION: Creates a variable entry in a netCDF file.  It does not assign
+              a value to the variable.
+@TYPE       : Stand-alone executable.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
+

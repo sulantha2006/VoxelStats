@@ -1,0 +1,9 @@
+/* ----------------------------------------------------------------------------
+@NAME       : micreate
+@DESCRIPTION: Creates a new MINC file from a specified parent file, and copies
+              over the specified variables.
+@TYPE       : Stand-alone executable.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
+

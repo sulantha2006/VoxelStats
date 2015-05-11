@@ -1,0 +1,7 @@
+/* ----------------------------------------------------------------------------
+@NAME       : miwriteatt
+@DESCRIPTION: Writes values to an attribute in a netCDF file.
+@TYPE       : Stand-alone executable.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */

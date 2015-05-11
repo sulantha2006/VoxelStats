@@ -1,0 +1,241 @@
+                    ------------------------------
+                              EMMA 1.0.0
+
+                            5 February 2010
+                    ------------------------------
+
+This version fixes a segmentation fault that commonly occurs on
+64-bit architectures. It is a mystery why 32 bits work, but this
+could be related to the Matlab mex compiler in 32 vs 64 bits. The
+new code seems to work in both 32 and 64 bits with recent versions
+of Matlab and the surfstats package.
+
+The maintainer of this release is Claude Lepage, claude@bic.mni.mcgill.ca
+
+                    ------------------------------
+                              EMMA 0.9.9
+
+                            10 January 2008
+                    ------------------------------
+
+This version can now be built with minc2 (which has become the default
+for compilation). The following steps are suggested to build it:
+1 - build minc2, HDF5, netcdf
+2 - make MINCLIBPATH=... MINCINCPATH=... CC=gcc MATLAB_INSTALL_DIR=...
+    BIN_INSTALL_DIR=... DOC_INSTALL_DIR=... 
+    make MINCLIBPATH=... MINCINCPATH=... CC=gcc MATLAB_INSTALL_DIR=...
+    BIN_INSTALL_DIR=... DOC_INSTALL_DIR=... install
+    where you have to fill in the blanks for the paths in the above.
+    The Makefile will try to autodetect your architecture (if Linux,
+    IRIX, SunOS or Darwin). For minc1, add the option MINC_BASE=1.
+    MINCLIBPATH has the form MINCLIBPATH=-L/usr/local/mni/bin (this
+    string is passed to the linker so you must add -L in front).
+    MINCINCPATH has the form MINCINCPATH=-I/usr/local/mni/include
+    (this string is passed to the preprocessor to you must add -I 
+    in front). 
+
+The maintainer of this release is Claude Lepage, claude@bic.mni.mcgill.ca
+
+                    ------------------------------
+                              EMMA 0.9.6
+
+                            11 March 2004
+                    ------------------------------
+
+This version is a maintenance release which deals with some of the
+issues arising from changes in Matlab's programming interface for MEX
+files.  There should be no user-visible changes in EMMA 0.9.6 relative
+to EMMA 0.9.5
+
+The maintainer of this release is Bert Vincent, bert@bic.mni.mcgill.ca
+
+                    ------------------------------
+                              EMMA 0.9.4
+
+                           20 October, 1997
+                    ------------------------------
+
+
+Welcome to EMMA!
+================
+
+EMMA is a MATLAB package developed at the McConnell Brain Imaging Centre
+(BIC) of the Montreal Neurological Institute, created to allow MATLAB
+programmers to develop medical image analysis applications quickly and
+interactively.  Previously this development was done at the BIC with
+FORTRAN on a VAX.  In spite of the inherent loss of speed due to using
+an interpreted language, the reduced time and complexity of development
+offer a significant advantage.  (In fact, MATLAB code written to
+carefully take advantage of MATLAB's vectorized nature can compete with
+code written in compiled languages.  Of course, it doesn't hurt that
+today's Unix workstations are a heck of a lot faster than yesterday's
+VAXen.)
+
+Release 0.9.4 is mostly a bug-fix release; see the CHANGES file for
+details.  Several of those bugs only revealed themselves when we tested
+EMMA under MATLAB 5, though, so this release has the distinction of
+being the first to compile and run under both MATLAB 4 and 5.
+
+The acronym EMMA stands for whatever you want it to stand for.
+Current favourites include:
+   EMMA Makes MATLAB Acceptable
+   EMMA: MATLAB and MINC Arguing
+   Elbowing MATLAB and MINC into Agreement
+   Everyone's Memory Munching Alternative
+   Effortlessly Making MINC Accessible
+
+In a nutshell: it makes quantitative analysis of medical image data in
+MINC files readily accessible to MATLAB programmers.
+
+
+Components
+----------
+
+EMMA consists of:
+
+     1) MATLAB scripts.  These do not need to be compiled.
+     2) CMEX programs.  These are dynamically loaded by MATLAB when
+        they are called, and must be compiled.  You will need the cmex
+	script supplied with MATLAB, as well as the MINC and NetCDF
+	libraries.  You should have obtained these libraries along with
+	EMMA; if not, they are available by anonymous ftp from
+	ftp.bic.mni.mcgill.ca, in /pub/minc.
+     3) Stand-alone C programs.  These require both the MINC and
+        netCDF libraries.
+     4) LaTeX documentation.  Figures are included using the widely
+        available psfig package.  PostScript versions of the
+        documentation are included in case you don't have LaTeX.
+
+
+Building
+--------
+
+To build EMMA (after unpacking the archive):
+
+     1) Edit Makefile.site for various site-dependent parameters.
+	These include the architecture type, the directories where
+	MATLAB, MINC, and NetCDF are installed, and the directories
+	to which EMMA will be installed.  Be sure to read the comments	
+	in Makefile.site carefully.
+     2) Take a look in the Makefile for your architecture (one of
+        Makefile.irix4, Makefile.irix5, Makefile.sun4, and
+        Makefile.linux), and ensure that the compiler and compiler flags
+        are reasonable.  (The C compiler used must be ANSI compliant,
+        hence the default for SunOS is 'gcc'.  You might prefer to use
+        'acc' if you have it.)
+     3) Type "make".
+
+If your architecture is not supported by EMMA, don't despair -- all you
+have to do is create a Makefile fragment named after your architecture,
+using one of the existing machine-specific Makefiles as a model.  If you
+have to do create a new machine-specific Makefile fragment, please let
+us know -- we want EMMA to be readily usable on as many Unix-like
+platforms as possible, and including your new Makefile in future EMMA
+distributions will help.
+
+
+Installation
+------------
+
+     1) Type "make install".  (Note that you must have already edited
+	Makefile.site to set the destination directories.)  All MATLAB
+	files (.m and CMEX) will be copied to a specified directory
+	(MATLAB_INSTALL_DIR), the standalone binaries will be copied to
+	a different directory (BIN_INSTALL_DIR), and the documentation
+	(in PostScript form) to a third directory (DOC_INSTALL_DIR).
+
+Assuming that MATLAB is installed under /usr/local/matlab (this can be
+changed in Makefile.site), then EMMA will by default be installed to
+/usr/local/matlab/toolbox/emma.  You will have to modify the MATLAB
+path to search this directory; this can be done for an individual user
+by setting the MATLABPATH environment variable, i.e. add
+
+     setenv MATLABPATH /usr/local/matlab/toolbox/emma
+
+to your .cshrc file (or equivalent to your .profile, if you're a
+sh/zsh/bash/ksh type of person).  To make a system-wide modification,
+add the line
+
+     path (path, '/usr/local/matlab/toolbox/emma');
+
+to the system matlabrc.m file.  (This file lives in toolbox/local
+under the root MATLAB directory.)  (Of course, you could also set
+MATLABPATH for all users, or you could put a 'path' statement in your
+personal startup.m file.  Take your pick.)
+
+The binary executables should be somewhere in your default search
+path.  Therefore, the default is to put them in /usr/local/bin; you
+could give them their own directory, but you'd have to ensure that
+they are on the system search path ($PATH, not MATLAB's search path)
+whenever EMMA is used.
+
+The documentation files can go wherever you normally put documentation
+files.  We provide the original LaTeX source files, DVI files, and
+PostScript(tm) output files.  Between all these options, you should
+have some way of printing out the final documentation.  We are
+currently working on an interactive HTML (Hyper Text Markup Language)
+version of the documentation suitable for browsing with a World Wide
+Web (WWW) client; you should be able to find this documentation at the
+BIC's web site:
+
+   http://www.bic.mni.mcgill.ca/
+
+
+
+Bug Reports
+-----------
+
+EMMA is fairly mature at this point (even though it's still not at
+release 1.0), but we make no guarantees that it's free of bugs.  If
+you think you have found a bug, we very much want to hear about it.
+(Even if you haven't found a bug, it may be that the documentation
+isn't clear or is erroneous; this is considered a documentation bug,
+and will be dealt with accordingly.)
+
+The current maintainer of EMMA is Greg Ward; he can be reached at:
+
+E-mail:      greg@bic.mni.mcgill.ca
+
+Snail-mail:  McConnell Brain Imaging Centre
+             McGill University
+             3801 University Street
+             Montreal, Quebec        H3A 2B4
+             Canada
+
+
+Authors & Acknowledgements
+--------------------------
+The authors of EMMA are:
+             Mark Wolforth
+             Greg Ward
+
+    EMMA started as a summer project back in 1993, when both of us
+    were undergraduates (Mark in electrical engineering, Greg in
+    physics).  It has undergone continued maintenance throughout our
+    years of graduate school (biomedical engineering and computer
+    science, respectively), and has been in constant use at the BIC
+    for the last four years.
+
+    We would like to thank Sean Marrett for being the driving force
+    behind this project.  He provided invaluable guidance when all
+    seemed lost.
+
+    We would also like to thank Brad Beattie from Memorial
+    Sloan-Ketering Cancer Center, who was the first to suffer the
+    installation process, and gave many important pointers to where we
+    had gone wrong.
+
+
+Copyright Notice and Disclaimer
+-------------------------------
+
+    Copyright (c) 1993-97 Mark Wolforth and Greg Ward, McConnell Brain
+    Imaging Centre, Montreal Neurological Institute, McGill
+    University.
+
+    Permission to use, copy, modify, and distribute this software and
+    its documentation for any purpose and without fee is hereby
+    granted, provided that the above copyright notice appear in all
+    copies.  The authors and McGill University make no representations
+    about the suitability of this software for any purpose.  It is
+    provided "as is" without express or implied warranty.

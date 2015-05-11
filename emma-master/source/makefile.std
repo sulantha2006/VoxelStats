@@ -1,0 +1,63 @@
+# ------------------------------------------------------------------
+# makefile.std: a makefile template for standalone binaries in EMMA.
+# Assumes the following macros have been defined:
+#   PROG    name of the program to build (no suffixes); eg. PROG=foo
+#           will build foo from foo.c (via foo.o)
+#   OBJ     .o files that need to be loaded with PROG.o to build PROG
+#   EMMA_ROOT    the root EMMA directory
+# 
+# The other commonly-needed macros and rules to build $(PROG) are then
+# defined or read in from Makefile.site.  E.g., to build foo using only
+# the files foo.c and bar.c, you could could create a simple makefile in
+# the directory where foo.c lives (assuming it is one level below this
+# file):
+# 
+#  PROG=foo
+#  OBJS=bar.o
+#  include ../makefile.std
+#
+# or, also from foo's directory, you could directly execute make:
+#
+#  make -f ../makefile.cmex PROG=foo OBJS=bar.o
+#
+# Note that OBJS is entirely optional.
+#
+# by Greg Ward 1994/03/10
+#
+# $Id: makefile.std,v 1.6 2008-01-11 01:58:29 claude Exp $
+# ------------------------------------------------------------------
+
+# This makefile gets included from one directory lower, so we must
+# take this into account in the root path.
+
+EMMA_ROOT = ../../
+EMMA_BIN = $(EMMA_ROOT)bin
+
+#
+# Include the site- and architecture-specific definitions.  ("Architecture"
+# also includes the development options in Makefile.develop.)
+#
+
+include $(EMMA_ROOT)Makefile.site
+
+LDFLAGS  = $(LIBDIRS) -lemma $(MINCLIBS) -lm -lc $(XDR_LIB)
+
+PROG_SRC = $(PROG).c
+PROG_OBJ = $(PROG).o
+LINTOPT  = -u
+LINT     = lint
+
+
+CFLAGS   = $(CFLAGS_STD) $(DEFINES) $(INCLUDES)
+LINTFLAGS = $(LINTOPT) $(DEFINES) $(INCLUDES)
+
+# the default case: PROG depends on all the object files
+$(EMMA_BIN)/$(PROG): $(PROG_OBJ) $(OBJS)
+	rm -f $@
+	$(CC) $(CFLAGS_STD) $(PROG_OBJ) $(OBJS) -o $@ $(LDFLAGS)
+
+lint:
+	$(LINT) $(LINTFLAGS) $(PROG_SRC)
+
+clean:
+	rm -f *.o $(EMMA_BIN)/$(PROG)

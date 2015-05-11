@@ -1,0 +1,11 @@
+/* ----------------------------------------------------------------------------
+@NAME       : nframeint
+@DESCRIPTION: Calculates the integrals of a function (represented as a
+              set of points in y, sampled at the time points in ts)
+              across each of a set of frames which are given by their
+              start times and lengths.  The integral is then
+              normalised so that nframeint returns the average value
+              of y (as a function of ts) across each frame.
+@TYPE       : CMEX file to be dynamically linked by MATLAB
+@LIBRARIES  : EMMA
+---------------------------------------------------------------------------- */

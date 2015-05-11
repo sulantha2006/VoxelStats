@@ -1,0 +1,15 @@
+/* ----------------------------------------------------------------------------
+@NAME       : bloodtonc
+@INPUT      : A CNT format blood file.  This is a file format designed
+              by Chris Thompson at the MNI, and is specific to the
+	      MNI.  We are working on phasing it out.
+@OUTPUT     : A BNC (Blood Net Cdf) format blood file.  This is a
+              netCDF file that is similar in format to the MINC
+	      format.  It is intended that this blood data be included
+	      in the MINC file so that all data is kept together.
+@DESCRIPTION: Creates a BNC file from a CNT file.  This should
+              probably only be of interest to people at the MNI, since
+	      CNT is an archaic file format that is only used there.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
