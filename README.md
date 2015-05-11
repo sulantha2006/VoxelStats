@@ -21,5 +21,7 @@ Currently this is distributed under GNU public license with no warranty but I wo
 This utilizes any parellel profiles setup in your MATLAB. 
 
 Package requirements : 
+
 MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
+
 EMMA Toolkit - https://github.com/BIC-MNI/emma
