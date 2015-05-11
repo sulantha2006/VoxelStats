@@ -16,6 +16,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 This program will let you run voxelwise generalized linear modeling with MINC2 file type. This program is inspired by Jason Lerch's RMINC and Keith Worsley's SurfStats toolboxes and compliments those packages with adding support for adding voxelwise predicting variables. 
+
 Currently this is distributed under GNU public license with no warranty but I would love to support for an issue as my time permits. Please acknowledge this repository in your documents. 
 This utilizes any parellel profiles setup in your MATLAB. 
+
 Also, I have added the EMMA toolbox by BIC-MNI, McGill University that is the interface between MATLAB and MINC files. This program requires minc-toolkit installed in your computer. Acknowledgement to developers of EMMA toolbox in BIC-MNI. 
