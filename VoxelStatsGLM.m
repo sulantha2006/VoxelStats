@@ -95,11 +95,13 @@ image_height_p = image_height;
 image_width_p = image_width;
 finalTStruct=[];
 finalEStruct=[];
+finalORStruct=[];
 for x = 1:length(varsInRegressionNames)
     finalTStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(tStruct(:,x), mask_slices, image_elements, slices);
     finalEStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(eStruct(:,x), mask_slices, image_elements, slices);
+    finalORStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(exp(eStruct(:,x)), mask_slices, image_elements, slices);
 end
-c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct);
+c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct, 'oddsRatioValues', finalORStruct);
 coeff_vars = varsInRegressionNames;
 fprintf('Total - ');
 toc(functionTimer)
