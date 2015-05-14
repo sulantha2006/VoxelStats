@@ -1,6 +1,9 @@
-function VoxelStatsWrite( data, filename, ref_file, noOfSlices )
-
-h = newimage(filename, [0 noOfSlices], ref_file);
+function VoxelStatsWrite( data, filename, ref_file, noOfSlices, imageType )
+switch nargin
+    case 4
+        imageType = 'double';
+end
+h = newimage(filename, [0 noOfSlices], ref_file, imageType);
 putimages(h, data, 1:noOfSlices);
 closeimage(h);
 
