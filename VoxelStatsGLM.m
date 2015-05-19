@@ -191,6 +191,7 @@ function [mapForSlice, numberOfModels, isEnd] = getMultiVarMapForSlice(multiVarM
     for var = multivalueVariables
         varData = multiVarMap(var{1,1});
         if (((index-1)*blockSize)+1) > numOfModels
+            numberOfModels = 0;
             isEnd = 1;
         elseif (index*blockSize > numOfModels) && ((((index-1)*blockSize)+1) < numOfModels)
             mapForSlice(var{1,1}) = varData(:,(((index-1)*blockSize)+1):end);
