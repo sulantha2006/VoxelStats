@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLM( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLM( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
 functionTimer = tic;
 mainDataTable = readtable(data_file);
     
@@ -51,6 +51,16 @@ multiVarMap = getMultiVarData(mainDataTable, multivalueVariables, slices, image_
 fprintf('File Read - ');
 toc(readDataTimer)
 dataTable = mainDataTable(:,usedVars);
+
+%%Do multi value operations if specified
+if nargin > 6 
+    operationKeys = multiVarOperationMap.keys;
+    for k_idx = 1:length(operationKeys)
+        operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''')']);
+        str = strcat('multiVarMap(''', operationKeys{k_idx}, ''') = multiVarMap(''', operationKeys{k_idx}, ''')' , operation);
+        eval([str]);
+    end
+end
 
 
 %%Run Analysis
@@ -189,6 +199,7 @@ function [mapForSlice, numberOfModels, isEnd] = getMultiVarMapForSlice(multiVarM
     for var = multivalueVariables
         varData = multiVarMap(var{1,1});
         if (((index-1)*blockSize)+1) > numOfModels
+            numberOfModels = 0;
             isEnd = 1;
         elseif (index*blockSize > numOfModels) && ((((index-1)*blockSize)+1) < numOfModels)
             mapForSlice(var{1,1}) = varData(:,(((index-1)*blockSize)+1):end);
