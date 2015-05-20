@@ -56,8 +56,8 @@ dataTable = mainDataTable(:,usedVars);
 if nargin > 7 
     operationKeys = multiVarOperationMap.keys;
     for k_idx = 1:length(operationKeys)
-        operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''')']);
-        str = strcat('multiVarMap(''', operationKeys{k_idx}, ''') = multiVarMap(''', operationKeys{k_idx}, ''')' , operation);
+        operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''');']);
+        str = strcat('multiVarMap(''', operationKeys{k_idx}, ''') = multiVarMap(''', operationKeys{k_idx}, ''')' , operation, ';');
         eval([str]);
     end
 end
