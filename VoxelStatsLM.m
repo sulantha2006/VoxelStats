@@ -51,7 +51,7 @@ multiVarMap = getMultiVarData(mainDataTable, multivalueVariables, slices, image_
 fprintf('File Read - ');
 toc(readDataTimer)
 dataTable = mainDataTable(:,usedVars);
-
+fprintf('Total files read - %d - ', height(dataTable));
 %%Do multi value operations if specified
 if nargin > 6 
     operationKeys = multiVarOperationMap.keys;
