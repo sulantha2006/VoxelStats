@@ -48,10 +48,10 @@ image_elements = image_height * image_width;
 fprintf('Reading Data: \n');
 readDataTimer = tic;
 multiVarMap = getMultiVarData(mainDataTable, multivalueVariables, slices, image_elements, mask_slices);
-fprintf('File Read - ');
+fprintf('Files Read - ');
 toc(readDataTimer)
 dataTable = mainDataTable(:,usedVars);
-
+fprintf('Total files read - %d - ', height(dataTable));
 %%Do multi value operations if specified
 if nargin > 7 
     operationKeys = multiVarOperationMap.keys;
