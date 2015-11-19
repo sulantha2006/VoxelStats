@@ -82,7 +82,7 @@ for sliceCount = 1:totalDataSlices
     fprintf('Artificial Slice - %d - ', sliceCount);
     artificialSliceTimer = tic;
     blockSize = ceil(numOfModels/totalDataSlices);
-    [multiVarMapForSlice, numberOfModels_t, isEnd] = getMultiVarMapForSlice(multiVarMap, multivalueVariables, sliceCount, numOfModels, blockSize);
+    [multiVarMapForSlice, numberOfModels_t, isEnd] = getMultiVarMapForSliceMultiVar(multiVarMap, multivalueVariables, sliceCount, numOfModels, blockSize);
     if isEnd
         toc(artificialSliceTimer)
         break;
@@ -117,70 +117,6 @@ fprintf('Total - ');
 toc(functionTimer)
 end
 
-function [mask_slices_n, mask_height, mask_width, mask_slices] = getMaskSlices(mask_file)
-    mask = [];
-    try
-        mask = openimage(mask_file);
-        mask_slices_n = getimageinfo(mask, 'NumSlices');
-        mask_height = getimageinfo(mask, 'ImageHeight');
-        mask_width = getimageinfo(mask, 'ImageWidth');
-        mask_slices_t = getimages(mask, 1:mask_slices_n);
-    catch
-        fprintf('File reading failed for : %s \nSleeping 5s before retrying...', mask_file);
-        try
-            closeimage(mask);
-        end
-        pause(5);
-        mask = openimage(mask_file);
-        mask_slices_n = getimageinfo(mask, 'NumSlices');
-        mask_height = getimageinfo(mask, 'ImageHeight');
-        mask_width = getimageinfo(mask, 'ImageWidth');
-        mask_slices_t = getimages(mask, 1:mask_slices_n);
-        fprintf('Done...\n');
-    end
-    mask_slices = mask_slices_t > 0.9;
-    closeimage(mask);
-end
-
-function [multiVarMap] = getMultiVarData(mainDataTable, multivalueVariables, totalSlices, image_elements, mask_slices)
-    multiVarMap = containers.Map();
-    for var = multivalueVariables
-        U = matlab.lang.makeUniqueStrings(var{1});
-        eval([U '= readmultiValuedMincData(mainDataTable.' var{1,1} ',' num2str(totalSlices) ',mask_slices);']);
-        str = strcat('multiVarMap(''', var{1,1}, ''') = ', U, ';' );
-        eval([str]);
-    end
-end
-
-function [resultMat] = readmultiValuedMincData( subjectList, totalSlices, mask_slices)
-    [n m] = size(subjectList);
-    resultMat = zeros(n, sum(sum(mask_slices)));
-    for i = 1:n
-        h = [];
-        for retry=1:5
-            try
-                h = openimage(subjectList{i,1});
-                t = getimages(h, 1: totalSlices);
-                resultMat(i,:) = t(mask_slices)';
-                break;
-            catch
-                fprintf('File reading failed for : %s \nSleeping 5s before retrying...\n', subjectList{i,1});
-                try
-                    closeimage(h);
-                end
-                pause(5);
-                if retry < 5
-                    continue;
-                else
-                    fprintf('File reading failed and connot recover. ')
-                    exit
-                end
-            end
-        end
-    end
-
-end
-
 function [ model ] = parForVoxelLM(table, formula, distribution, k, categoricalVars, multivalueVariables, multiVarMap)
     for varName = multivalueVariables
         varData = multiVarMap(varName{1,1});
@@ -195,25 +131,3 @@ function [ model ] = parForVoxelLM(table, formula, distribution, k, categoricalV
         
 end
 
-function [mapForSlice, numberOfModels, isEnd] = getMultiVarMapForSlice(multiVarMap, multivalueVariables, index, numOfModels, blockSize)
-    mapForSlice = containers.Map();
-    isEnd = 0;
-    for var = multivalueVariables
-        varData = multiVarMap(var{1,1});
-        if (((index-1)*blockSize)+1) > numOfModels
-            numberOfModels = 0;
-            isEnd = 1;
-        elseif (index*blockSize > numOfModels) && ((((index-1)*blockSize)+1) < numOfModels)
-            mapForSlice(var{1,1}) = varData(:,(((index-1)*blockSize)+1):end);
-            numberOfModels = numOfModels - (((index-1)*blockSize)+1);
-        else
-            mapForSlice(var{1,1}) = varData(:,(((index-1)*blockSize)+1):(index*blockSize));
-            numberOfModels = blockSize;
-        end
-    end
-end
-
-function [mat] = getVoxelStructFromMask(vector, mask_slices, image_elements, numberOfslices)
-    mat = zeros(image_elements, numberOfslices);
-    mat(mask_slices) = vector;
-end
