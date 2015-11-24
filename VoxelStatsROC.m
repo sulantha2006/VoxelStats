@@ -1,13 +1,20 @@
-function [ c_struct ] = VoxelStatsROC( inputTable, dataColumn, groupColumnName, mask_file )
-functionTimer = tic;
-mainDataTable = readtable(inputTable);
+function [ c_struct ] = VoxelStatsROC( inputTable, dataColumn, groupColumnName, mask_file, includeString )
+    functionTimer = tic;
+    mainDataTable = readtable(inputTable);
+
+    if length(includeString) > 0
+        incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
+        eval(['mainDataTable_rows = ' incStr ';']);
+        mainDataTable = mainDataTable(mainDataTable_rows, :);
+    end
+
     %%Get Mask data
     [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
     image_elements = image_height * image_width;
-    
+
     eval(['multiVarData = readmultiValuedMincData(mainDataTable.' dataColumn ',' num2str(slices) ', mask_slices);']);
     groupingData = eval(['mainDataTable.' groupColumnName ';']);
-    
+
     numOfModels = sum(sum(mask_slices));
     totalDataSlices = 200;
     thStruct = zeros(numOfModels,1);
@@ -15,38 +22,38 @@ mainDataTable = readtable(inputTable);
     fprStruct = zeros(numOfModels,1);
     fprintf('Analysis Starting: \n');
     analysisTimer = tic;
-    
+
     %Slicing data
     for sliceCount = 1:totalDataSlices
-        fprintf('Artificial Slice - %d - ', sliceCount);
-        artificialSliceTimer = tic;
-        blockSize = ceil(numOfModels/totalDataSlices);
-        [sliceData, numberOfModels_t, isEnd] = getMultiVarForSlice(multiVarData, sliceCount, numOfModels, blockSize);
-        if isEnd
-            toc(artificialSliceTimer)
-            break;
-        end
-        slices_th = zeros(numberOfModels_t, 1);
-        slices_tpr = zeros(numberOfModels_t, 1);
-        slices_fpr = zeros(numberOfModels_t, 1);
-        parfor k = 1:numberOfModels_t
-            roc = parForROC(groupingData, sliceData(:,k));
-            slices_th(k) = roc.th;
-            slices_tpr(k) = roc.tpr;
-            slices_fpr(k) = roc.fpr;
-        end
-        thStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_th;
-        tprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_tpr;
-        fprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_fpr;
+    fprintf('Artificial Slice - %d - ', sliceCount);
+    artificialSliceTimer = tic;
+    blockSize = ceil(numOfModels/totalDataSlices);
+    [sliceData, numberOfModels_t, isEnd] = getMultiVarForSlice(multiVarData, sliceCount, numOfModels, blockSize);
+    if isEnd
         toc(artificialSliceTimer)
+        break;
+    end
+    slices_th = zeros(numberOfModels_t, 1);
+    slices_tpr = zeros(numberOfModels_t, 1);
+    slices_fpr = zeros(numberOfModels_t, 1);
+    parfor k = 1:numberOfModels_t
+        roc = parForROC(groupingData, sliceData(:,k));
+        slices_th(k) = roc.th;
+        slices_tpr(k) = roc.tpr;
+        slices_fpr(k) = roc.fpr;
+    end
+    thStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_th;
+    tprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_tpr;
+    fprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_fpr;
+    toc(artificialSliceTimer)
     end
     fprintf('Analysis Done - ');
     toc(analysisTimer)
-    
+
     finalTHStruct=getVoxelStructFromMask(thStruct, mask_slices, image_elements, slices);
     finalTPRStruct=getVoxelStructFromMask(tprStruct, mask_slices, image_elements, slices);
     finalFPRStruct=getVoxelStructFromMask(fprStruct, mask_slices, image_elements, slices);
-    
+
     c_struct = struct('thValues', finalTHStruct, 'tprValues', finalTPRStruct, 'fprValues', finalFPRStruct);
     fprintf('Total - ');
     toc(functionTimer)

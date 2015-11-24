@@ -1,5 +1,5 @@
 function [ result_h, result_p, result_t ] = VoxelStatsT( inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
-mainDataTable = readtable(inputTable);
+    mainDataTable = readtable(inputTable);
     
     if length(includeString) > 0
         incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
@@ -8,8 +8,8 @@ mainDataTable = readtable(inputTable);
     end
     
     %%Get Mask data
-[slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
-image_elements = image_height * image_width;
+    [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
+    image_elements = image_height * image_width;
     
     if isstr(group1)
         eval(['group1_rows = strcmp(mainDataTable. ' groupColumnName ', ''' group1 ''');']);

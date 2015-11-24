@@ -1,5 +1,5 @@
 function [ result_h, result_p, result_t ] = VoxelStatsPairedT( inputTable, contrastColumnId1, contrastColumnId2, includeString, mask_file )
-mainDataTable = readtable(inputTable);
+    mainDataTable = readtable(inputTable);
     
     if length(includeString) > 0
         incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
