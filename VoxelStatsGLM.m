@@ -2,43 +2,29 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
 functionTimer = tic;
 mainDataTable = readtable(data_file);
     
-    if length(includeString) > 0
-        incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
-        eval(['mainDataTable_rows = ' incStr ';']);
-        mainDataTable = mainDataTable(mainDataTable_rows, :);
-    end
-    
-    multiVarMap = containers.Map();
-    
-    %% Parsing Model String
-    usedVars = {};
-    
-    temp = strsplit(stringModel, '~');
-    responseVar = temp(1);
-    U = matlab.lang.makeUniqueStrings(responseVar{1});
-    eval([U '= mainDataTable.' responseVar{1,1} ';']);
-    usedVars = [usedVars responseVar{1,1}];
-    
-    temp1 = strsplit(temp{1,2}, '+');
-    for t_var = temp1
-        c = t_var{1};
-        if isempty(strfind(t_var{1}, '*'))
-            U = matlab.lang.makeUniqueStrings(t_var{1});
-            eval([U '= mainDataTable.' t_var{1,1} ';']);
-            usedVars = [usedVars t_var{1,1}];
-        else
-            temp2 = strsplit(t_var{1}, '*');
-            for t_var2 = temp2
-                U = matlab.lang.makeUniqueStrings(t_var2{1});
-                eval([U '= mainDataTable.' t_var2{1,1} ';']);
-                usedVars = [usedVars t_var2{1,1}];
-            end
-        end
-    end
-   
-    
+if length(includeString) > 0
+    incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
+    eval(['mainDataTable_rows = ' incStr ';']);
+    mainDataTable = mainDataTable(mainDataTable_rows, :);
+end
 
+multiVarMap = containers.Map();
 
+%% Parsing Model String
+usedVars = {};
+usedVarsStr = {};
+while true
+    [str, s] = strtok(s, '+|-*()~ ');
+    if isempty(str),  break;  end
+    if all(ismember(str, '0123456789+-.eEdD')), continue; end
+    if ismember(str, usedVarsStr), continue; end
+
+    usedVarsStr = [usedVarsStr str];
+    U = matlab.lang.makeUniqueStrings(str);
+    eval([U '= mainDataTable.' str ';']);
+    usedVars = [usedVars str];
+end
+    
 %%Get Mask data
 [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
 

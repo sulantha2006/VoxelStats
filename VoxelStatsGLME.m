@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLM( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsGLME( stringModel, distribution, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
 functionTimer = tic;
 mainDataTable = readtable(data_file);
     
@@ -24,7 +24,7 @@ while true
     eval([U '= mainDataTable.' str ';']);
     usedVars = [usedVars str];
 end
-   
+    
 %%Get Mask data
 [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
 
@@ -34,12 +34,12 @@ image_elements = image_height * image_width;
 fprintf('Reading Data: \n');
 readDataTimer = tic;
 multiVarMap = getMultiVarData(mainDataTable, multivalueVariables, slices, image_elements, mask_slices);
-fprintf('File Read - ');
+fprintf('Files Read - ');
 toc(readDataTimer)
 dataTable = mainDataTable(:,usedVars);
 fprintf('Total files read - %d - ', height(dataTable));
 %%Do multi value operations if specified
-if nargin > 6 
+if nargin > 7 
     operationKeys = multiVarOperationMap.keys;
     for k_idx = 1:length(operationKeys)
         operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''');']);
@@ -51,7 +51,7 @@ end
 
 %%Run Analysis
 % Run only one voxel to get information
-templm = parForVoxelLM(dataTable, stringModel, 1, categoricalVars, multivalueVariables, multiVarMap);
+templm = parForVoxelLM(dataTable, stringModel, distribution, 1, categoricalVars, multivalueVariables, multiVarMap);
 varsInRegressionNames = templm.CoefficientNames;
 nVarsInRegression = length(varsInRegressionNames);
 %%Done one voxel fitlm
@@ -76,7 +76,7 @@ for sliceCount = 1:totalDataSlices
     slices_t = zeros(numberOfModels_t, nVarsInRegression);
     slices_e = zeros(numberOfModels_t, nVarsInRegression);
     parfor k = 1:numberOfModels_t
-        lm = parForVoxelLM(dataTable, stringModel, k, categoricalVars, multivalueVariables, multiVarMapForSlice);
+        lm = parForVoxelLM(dataTable, stringModel, distribution, k, categoricalVars, multivalueVariables, multiVarMapForSlice);
         slices_t(k, :) = lm.Coefficients.tStat';
         slices_e(k, :) = lm.Coefficients.Estimate';
     end
@@ -91,28 +91,29 @@ image_height_p = image_height;
 image_width_p = image_width;
 finalTStruct=[];
 finalEStruct=[];
+finalORStruct=[];
 for x = 1:length(varsInRegressionNames)
     finalTStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(tStruct(:,x), mask_slices, image_elements, slices);
     finalEStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(eStruct(:,x), mask_slices, image_elements, slices);
+    finalORStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(exp(eStruct(:,x)), mask_slices, image_elements, slices);
 end
-c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct);
+c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct, 'oddsRatioValues', finalORStruct);
 coeff_vars = varsInRegressionNames;
 fprintf('Total - ');
 toc(functionTimer)
 end
 
-function [ model ] = parForVoxelLM(table, formula, k, categoricalVars, multivalueVariables, multiVarMap)
+function [ model ] = parForVoxelLM(table, formula, distribution, k, categoricalVars, multivalueVariables, multiVarMap)
     for varName = multivalueVariables
         varData = multiVarMap(varName{1,1});
         str_cnt = strcat('table.',varName{1,1},' = varData(:,',num2str(k),');');
         eval([str_cnt]);   
     end  
     if length(categoricalVars{1}) > 0         
-        model = fitlm(table, formula, 'CategoricalVars', categoricalVars);
+        model = fitglme(table, formula, 'Distribution', distribution, 'CategoricalVars', categoricalVars);
     else
-        model = fitlm(table, formula);
+        model = fitglme(table, formula, 'Distribution', distribution);
     end
         
 end
-
 

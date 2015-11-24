@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLM( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLME( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
 functionTimer = tic;
 mainDataTable = readtable(data_file);
     
@@ -108,9 +108,9 @@ function [ model ] = parForVoxelLM(table, formula, k, categoricalVars, multivalu
         eval([str_cnt]);   
     end  
     if length(categoricalVars{1}) > 0         
-        model = fitlm(table, formula, 'CategoricalVars', categoricalVars);
+        model = fitlme(table, formula, 'CategoricalVars', categoricalVars);
     else
-        model = fitlm(table, formula);
+        model = fitlme(table, formula);
     end
         
 end
