@@ -13,6 +13,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
     %% Parsing Model String
     usedVars = {};
     usedVarsStr = {};
+    s = stringModel;
     while true
         [str, s] = strtok(s, '+|-*()~ ');
         if isempty(str),  break;  end
