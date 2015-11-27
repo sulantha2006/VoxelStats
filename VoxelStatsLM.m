@@ -41,7 +41,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
     dataTable = mainDataTable(:,usedVars);
     fprintf('Total files read - %d - ', height(dataTable));
     %%Do multi value operations if specified
-    if nargin > 6 
+    if nargin > 7 
         operationKeys = multiVarOperationMap.keys;
         for k_idx = 1:length(operationKeys)
             operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''');']);
