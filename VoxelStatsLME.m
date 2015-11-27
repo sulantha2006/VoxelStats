@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLME( stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLME( imageType, stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
     functionTimer = tic;
     mainDataTable = readtable(data_file);
 
@@ -27,14 +27,14 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
     end
 
     %%Get Mask data
-    [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
+    [slices, image_height, image_width, mask_slices] = readMaskSlices(imageType, mask_file);
 
     %%Get info from Voxel files.
     image_elements = image_height * image_width;
 
     fprintf('Reading Data: \n');
     readDataTimer = tic;
-    multiVarMap = getMultiVarData(mainDataTable, multivalueVariables, slices, image_elements, mask_slices);
+    multiVarMap = getMultiVarData(imageType, mainDataTable, multivalueVariables, slices, image_elements, mask_slices);
     fprintf('File Read - ');
     toc(readDataTimer)
     dataTable = mainDataTable(:,usedVars);

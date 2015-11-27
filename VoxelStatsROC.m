@@ -1,4 +1,4 @@
-function [ c_struct ] = VoxelStatsROC( inputTable, dataColumn, groupColumnName, mask_file, includeString )
+function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupColumnName, mask_file, includeString )
     functionTimer = tic;
     mainDataTable = readtable(inputTable);
 
@@ -9,10 +9,17 @@ function [ c_struct ] = VoxelStatsROC( inputTable, dataColumn, groupColumnName, 
     end
 
     %%Get Mask data
-    [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
+    [slices, image_height, image_width, mask_slices] = readMaskSlices(imageType, mask_file);
     image_elements = image_height * image_width;
-
-    eval(['multiVarData = readmultiValuedMincData(mainDataTable.' dataColumn ',' num2str(slices) ', mask_slices);']);
+    switch imageType
+        case {'mnc','MNC', 'minc', 'MINC'}
+            eval(['multiVarData = readmultiValuedMincData(mainDataTable.' dataColumn ',' num2str(slices) ', mask_slices);']);
+        case {'nii','NII', 'nifti', 'NIFTI'}
+            eval(['multiVarData = readmultiValuedNiftiData(mainDataTable.' dataColumn ',' num2str(slices) ', mask_slices);']);
+        otherwise
+            fprintf('Unknown Image type')
+            exit
+    end
     groupingData = eval(['mainDataTable.' groupColumnName ';']);
 
     numOfModels = sum(sum(mask_slices));
