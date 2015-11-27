@@ -1,4 +1,4 @@
-function [ result_h, result_p, result_t ] = VoxelStatsT( inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
+function [ result_h, result_p, result_t ] = VoxelStatsT( imageType, inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
     mainDataTable = readtable(inputTable);
     
     if length(includeString) > 0
@@ -8,7 +8,7 @@ function [ result_h, result_p, result_t ] = VoxelStatsT( inputTable, dataColumn,
     end
     
     %%Get Mask data
-    [slices, image_height, image_width, mask_slices] = getMaskSlices(mask_file);
+    [slices, image_height, image_width, mask_slices] = readMaskSlices(imageType, mask_file);
     image_elements = image_height * image_width;
     
     if isstr(group1)
@@ -16,14 +16,23 @@ function [ result_h, result_p, result_t ] = VoxelStatsT( inputTable, dataColumn,
     else
         eval(['group1_rows = mainDataTable. ' groupColumnName ' == ' num2str(group1) ';']);
     end
-    eval(['group1data = readmultiValuedMincData(mainDataTable(group1_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
     
     if isstr(group2)
         eval(['group2_rows = strcmp(mainDataTable. ' groupColumnName ', ''' group2 ''');']);
     else
         eval(['group2_rows = mainDataTable. ' groupColumnName '== ' num2str(group2) ';']);
     end
-    eval(['group2data = readmultiValuedMincData(mainDataTable(group2_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
+    switch imageType
+        case {'mnc','MNC', 'minc', 'MINC'}
+            eval(['group1data = readmultiValuedMincData(mainDataTable(group1_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
+            eval(['group2data = readmultiValuedMincData(mainDataTable(group2_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
+        case {'nii','NII', 'nifti', 'NIFTI'}
+            eval(['group1data = readmultiValuedNiftiData(mainDataTable(group1_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
+            eval(['group2data = readmultiValuedNiftiData(mainDataTable(group2_rows, :).' dataColumn ',' num2str(slices) ', mask_slices);']);
+        otherwise
+            fprintf('Unknown Image type')
+            exit
+    end
     
     [h, p, ci, t] = ttest2(group1data, group2data);
     
