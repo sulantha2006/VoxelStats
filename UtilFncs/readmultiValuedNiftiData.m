@@ -11,9 +11,6 @@ function [resultMat] = readmultiValuedNiftiData( subjectList, totalSlices, mask_
                 break;
             catch
                 fprintf('File reading failed for : %s \nSleeping 5s before retrying...\n', subjectList{i,1});
-                try
-                    clear h;
-                end
                 pause(5);
                 if retry < 5
                     continue;

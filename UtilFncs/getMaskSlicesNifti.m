@@ -19,6 +19,6 @@ function [mask_slices_n, mask_height, mask_width, mask_slices] = getMaskSlicesNi
         mask_slices_t = reshape(mask.img, [], mask_slices_n);
         fprintf('Done...\n');
     end
-    mask_slices = mask_slices_t > 0.9;
+    mask_slices = mask_slices_t > 0;
     clear mask;
 end

@@ -6,6 +6,7 @@ function VoxelStatsWriteNifti( data, filename, ref_file )
     ref_slices = ref_input.hdr.dime.dim(4);
     resh_data = reshape(data, ref_width, ref_height, ref_slices);
     ref_input.img = resh_data;
+    ref_input.fileprefix = filename;
     save_nii(ref_input, filename);
 
 end
