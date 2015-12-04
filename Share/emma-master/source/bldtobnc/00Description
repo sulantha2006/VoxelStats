@@ -1,0 +1,16 @@
+/* ----------------------------------------------------------------------------
+@NAME       : bldtobnc
+@INPUT      : A BLD format blood file.
+	      We are working on phasing it out.
+@OUTPUT     : A BNC (Blood Net Cdf) format blood file.  This is a
+              netCDF file that is similar in format to the MINC
+	      format.  It is intended that this blood data be included
+	      in the MINC file so that all data is kept together.
+@DESCRIPTION: Creates a BNC file from a BLD file.  This should
+              probably only be of interest to people at the MNI, since
+	      BLD is an archaic file format that is only used there.
+              This is a very half-assed effort, aimed at getting blood
+	      data acquired with the automatic sampler into MATLAB.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */

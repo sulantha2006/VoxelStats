@@ -1,0 +1,26 @@
+# Version control files
+\bCVS\b
+
+# Documentation temporary files
+
+.log$
+.aux$
+.toc$
+.dvi$
+.txt$
+
+# Other
+
+.depend
+mexrc.sh
+Makefile.develop
+
+# mex tools we don't include
+
+source/mexec
+source/micreate
+source/micreatedim
+source/micreatevar
+
+# emacs backup files
+~$

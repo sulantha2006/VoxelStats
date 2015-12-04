@@ -1,0 +1,9 @@
+/* ----------------------------------------------------------------------------
+@NAME       : miinquire
+@DESCRIPTION: CMEX routine to mirror the functionality of mincinfo.  Currently
+              only provides general image info and dimension length.
+@TYPE       : CMEX file to be dynamically linked by MATLAB
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
+

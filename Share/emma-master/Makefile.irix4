@@ -1,0 +1,15 @@
+# Options for compiling EMMA programs for SGI (IRIX 4.0.x).
+# Distribution version.
+
+RANLIB      = 
+MEX_EXT     = mexsg
+CMEX_LIBS   = -lemma -lminc_G0 -lnetcdf_G0 \
+              -lsun -lm_G0 -lc_G0 \
+              -lmalloc_G0
+XDR_LIB     = -lsun
+CC          = cc
+
+# C compiler options, for CMEX and standalone programs.
+
+CFLAGS_MEX  = -O2 -D__STDC__ -prototypes -G 0
+CFLAGS_STD  = -O2 -D__STDC__ -prototypes

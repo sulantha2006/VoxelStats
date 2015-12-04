@@ -1,0 +1,860 @@
+\def\endfunchelp{\par\medskip\noindent\rule{\textwidth}{1pt}\par\bigskip}
+
+{\large\bf CALPIX} {\em  generates the vector index of a point}
+\begin{verbatim}
+
+
+        cp = calpix(x,y)
+
+
+\end{verbatim}
+
+  generates the vector index (1 to 16384) of 
+  the x and y coordinates of a pixel in a 128*128 image.
+  It uses the simple formula 
+ 
+        cp = round(x) + 128 * round(y-1)
+ 
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf CHECK\_SF} {\em  for internal use only}
+\begin{verbatim}
+
+
+       msg = check_sf (handle, slices, frames)
+
+
+\end{verbatim}
+
+\begin{itemize}
+\item \code{msg = []}: all is OK
+\item \code{msg} = error message if there's anything wrong
+\end{itemize}
+
+  makes sure that the given slices and frames vectors
+  are consistent with the image specified by handle.  Checks for:
+
+\begin{itemize}
+\item both slices and frames cannot be vectors
+\item if image has no frames, frames vector should be empty
+\item if frames vector is empty, image must have no frames
+\item if image has no slices, slices vector should be empty
+\item if slices vector is empty, image must have no slices
+\end{itemize}
+
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf CLOSEIMAGE} {\em  closes image data set(s)}
+\begin{verbatim}
+
+
+      closeimage (handles)
+
+
+\end{verbatim}
+
+  Closes one or more image data sets.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf DERIV} {\em  calculate the derivative and smoothed version of a function}
+\begin{verbatim}
+
+
+       [yfit, deriv] = deriv (fit_points, data_points, y, dt)
+
+
+\end{verbatim}
+
+   This function calculates the derivative and smoothed
+   version of a function, using the method of parabolic
+   regressive filters, described in Sayers: "Inferring
+   Significance from Biological Signals."
+ 
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf GETBLOODDATA} {\em retrieve blood activity and sample times from a study}
+\begin{verbatim}
+
+
+         [activity, mid_times] = getblooddata (study)
+
+
+\end{verbatim}
+
+   The study variable can be a handle to an open image, or the name of 
+   a NetCDF (MNC or BNC) file containing the blood activity data for
+   the study.  If it is a handle, getblooddata will first look in the
+   associated MINC file (if any), and then in the associated BNC file
+   (if any) for the blood activity variables.  If just a filename
+   (either a MINC or BNC file) is given, getblooddata will look in that
+   file only.
+  
+   The mid-sample times will be calculated from amongst the variables
+   sample\_start, sample\_stop, and sample\_length.  The default is
+   mid = (sample\_start + sample\_stop)/2; but if sample\_stop is not
+   found in the MNC or BNC file, then mid = sample\_start + (sample\_length/2)
+   will be used instead.
+ 
+   If a file that does not exist is specified, or getblooddata cannot
+   find the blood activity data in either the MINC or BNC file, it will
+   print a warning message and return nothing (ie. empty matrices).
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf GETIMAGEINFO} {\em   retrieve helpful trivia about an open image}
+\begin{verbatim}
+
+
+      info = getimageinfo (handle, whatinfo)
+
+
+\end{verbatim}
+
+  Get some information about an open image.  handle refers to a MINC
+  file previously opened with openimage or created with newimage.
+  whatinfo is a string that describes what you want to know about.
+  The possible values of this string are numerous and ever-expanding.
+  
+  The first possibility is the name of one of the standard MINC image
+  dimensions: 'time', 'zspace', 'yspace', or 'xspace'.  If these are
+  supplied, getimageinfo will return the length of that dimension from
+  the MINC file, or 0 if the dimension does not exist.  Note that
+  requesting 'time' is equivalent to requesting 'NumFrames'; also,
+  the three spatial dimensions also have equivalences that are
+  somewhat more complicated.  For the case of transverse images,
+  zspace is equivalent to NumSlices, yspace to ImageHeight, and xspace
+  to ImageWidth.  See the help for newimage (or the MINC standard
+  documentation) for details on the relationship between image
+  orientation (transverse, sagittal, or coronal) and the MINC spatial
+  image dimensions.
+  
+  The other possibilities for whatinfo, and what they cause
+  getimageinfo to return, are as follows:
+ 
+\begin{description}
+\item \code{Filename}     - the name of the MINC file (if applicable)
+                     as supplied to openimage or newimage; will be
+                     empty if data set has no associated MINC file.
+\end{description}
+ 
+\begin{description}
+\item \code{NumFrames}    - number of frames in the study, 0 if non-dynamic
+                     study (equivalent to 'time')
+\end{description}
+ 
+\begin{description}
+\item \code{NumSlices}    - number of slices in the study (0 if no slice
+                     dimension)
+\end{description}
+ 
+\begin{description}
+\item \code{ImageHeight}  - the size of the second-fastest varying spatial 
+                     dimension in the MINC file.  For transverse
+                     images, this is just the length of MIyspace.
+                     Also, when an image is displayed with viewimage,
+                     the dimension that is "vertical" on your display
+                     is the image height dimension.  (Assuming
+                     viewimage is working correctly.)
+\end{description}
+ 
+\begin{description}
+\item \code{ImageWidth}   - the size of the fastest varying spatial
+                     dimension, which is MIxspace for transverse
+                     images.  When an image is displayed with
+                     viewimage, the image width is the horizontal
+                     dimension on your display.
+\end{description}
+ 
+\begin{description}
+\item \code{ImageSize}    - a two-element vector containing ImageHeight and
+                     ImageWidth (in that order).  Useful for viewing 
+                     non-square images, because viewimage needs to know
+                     the image size in that case.
+\end{description}
+ 
+\begin{description}
+\item \code{DimSizes}     - a four-element vector containing NumFrames, NumSlices,
+                     ImageHeight, and ImageWidth (in that order)
+\end{description}
+ 
+\begin{description}
+\item \code{FrameLengths} - vector with NumFrames elements - duration of
+                     each frame in the study, in seconds.  This is
+                     simply the contents of the MINC variable
+                     'time-width'; if this variable does not exist in
+                     the MINC file, then getimageinfo will return an
+                     empty matrix.
+\end{description}
+ 
+\begin{description}
+\item \code{FrameTimes}   - vector with NumFrames elements - start time of
+                     each frame, relative to start of study, in
+                     seconds.  This comes from the MINC variable
+                     'time'; again, if this variable is not found,
+                     then getimageinfo will return an empty matrix.
+\end{description}
+ 
+\begin{description}
+\item \code{MidFrameTimes} - time at the middle of each frame (calculated by
+                      FrameTimes + FrameLengths/2) in seconds
+\end{description}
+       
+  If the requested data item is invalid or the image specified by handle
+  is not found (ie. has not been opened), then the returned data will
+  be an empty matrix.  (You can test whether this is the case with
+  the isempty() function.)
+ 
+  SEE ALSO  openimage, newimage, getimages
+\endfunchelp
+
+%--------------------------------------
+{\large\bf GETIMAGES} {\em  Retrieve whole or partial images from an open MINC file.}
+\begin{verbatim}
+
+
+   images = getimages (handle [, slices [, frames [, old_matrix ...
+                       [, start_row [, num_rows]]]]])
+
+
+\end{verbatim}
+
+   reads whole or partial images from the MINC file specified by
+   handle.  Either slices or frames can be a vector (to specify a
+   set of several images), but at least one of them must be a scalar
+   -- it is not possible to read images from both different slices and
+   different frames at the same time.  (Multiple calls to getimages
+   will be needed for this.)  If the file is non-dynamic (no time
+   dimension), then the frames argument can be omitted or empty;
+   likewise, if there is no slice dimension, the slices argument can
+   be omitted or empty.  (But note that slices must be given if any
+   frames are to be specified -- thus, it may be necessary to supply
+   an empty matrix for slices in the unusual case of a MINC file with
+   frames but no slice variation.)
+ 
+   The default behaviour of getimages is to read whole images and
+   return them as MATLAB column vectors with the image rows stored
+   sequentially.  If multiple images are read, then they will be
+   returned as the columns of a matrix.  For instance, if 10 128x128
+   images are read, then getimages will return a 16384x10 matrix; to
+   extract a single image, use MATLAB's colon operator, as in foo
+   (:,1) to extract all rows of column 1 of the matrix foo.
+ 
+   To read partial images, you can specify a starting image row in
+   start\_row; if num\_rows is not supplied and start\_row is, then a
+   single row is read.  
+ 
+   To try to conserve memory use, you can "recycle" MATLAB matrices
+   when sequentially calling getimages to read in identically-sized
+   blocks of image data.  This is done by simply passing your image
+   matrix to getimages as old\_matrix, eg:
+ 
+   img = [];
+   for slice = 1:numslices
+      img = getimages (handle, slice, 1:numframes, img);
+      (process img)
+   end
+ 
+   This will get around MATLAB's tendency to unnecessarily allocate
+   new blocks of memory and leave old blocks unused.
+ 
+   EXAMPLES (assuming handle = openimage ('some\_minc\_file');)
+ 
+    To read in the first frame of the first slice:
+      one\_image = getimages (handle, 1, 1);
+    To read in the first 10 frames of the first slice:
+      first\_10 = getimages (handle, 1, 1:10);
+    To read in the first 10 slices of a non-dynamic (i.e. no frames) file:
+      first\_10 = getimages (handle, 1:10);
+    
+   Note that there is currently no way to write partial images -- this 
+   feature is provided in the hopes of cutting down memory usage due
+   to intermediate calculations; you should pre-allocate a matrix large
+   enough to hold your final results, and place them there as blocks of 
+   rows from the input MINC file are processed.  Then, when all rows
+   have been processed, a whole output image can be written to the
+   output file.
+\endfunchelp
+
+%--------------------------------------
+
+
+{\large\bf GETMASK} {\em returns a mask that is the same size as the passed image.}
+\begin{verbatim}
+
+
+      mask = getmask (image)
+
+
+\end{verbatim}
+
+  The mask consists of 0's and 1's, and is created interactively by
+  the user.  Currently, a threshold algorithm is used, based on the input
+  argument image: the user selects a threshold using a slider (the default
+  starting value is 1.8), and getmask selects all points in image greater
+  than the mean value of the entire image multiplied by threshold the
+  threshold.  It then displays image as masked by that threshold value, so
+  the user can refine the threshold to his/her satisfaction.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf GETPIXEL} {\em replacement for MATLAB's ginput function}
+\begin{verbatim}
+
+
+      [x,y] = getpixel(n)
+
+
+\end{verbatim}
+
+  MATLAB's ginput function crashes if there is no X display
+  defined.  This function checks to make sure that the display
+  exists before calling ginput.  The functionality of this
+  function is exactly the same as MATLAB's ginput.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf HOTMETAL} {\em a better hot metal color map.}
+\begin{verbatim}
+
+
+          map = hotmetal(num_colors)
+
+
+\end{verbatim}
+
+  HOTMETAL(M) returns an M-by-3 matrix containing a "hot" colormap.
+  HOTMETAL, by itself, is the same length as the current colormap.
+ 
+  For example, to reset the colormap of the current figure:
+
+\begin{verbatim}
+ 
+            colormap(hotmetal)
+ 
+\end{verbatim}
+
+  See also HSV, GRAY, PINK, HOT, COOL, BONE, COPPER, FLAG,
+           COLORMAP, RGBPLOT, SPECTRAL.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf MAKETAC} {\em Make a time-activity curve}
+\begin{verbatim}
+
+
+      tac = maketac(x,y,pet)
+
+
+\end{verbatim}
+
+      Generate a time-activity curve from a set of data.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf MIINQUIRE} {\em   find out various things about a MINC file from MATLAB}
+\begin{verbatim}
+
+
+    info = miinquire ('minc_file' [, 'option' [, 'item']], ...)
+
+
+\end{verbatim}
+
+  miinquire has a rather involved syntax, so pay attention.  The first
+  argument is always the name of a MINC file.  Following the filename
+  can come any number of "option sequences", which consist of the option
+  (a string) followed by zero or more items (more strings).
+ 
+  Any number of option sequences can be included in a single call to 
+  miinquire, as long as enough output arguments are provided (this is
+  checked mainly as a debugging aid to the user).  Generally, each option
+  results in a single output argument.
+ 
+  The currently available options are:
+ 
+      dimlength
+      imagesize
+      vartype
+  
+  Options that will most likely be added in the near future are:
+ 
+      dimnames
+      varnames
+      vardims
+      varatts
+      atttype
+      attvalue
+ 
+  One inconsistence with the standalone utility mincinfo (after which 
+  miinquire is modelled) is the absence of the option "varvalues".  
+  The functionality of this available in a superior way via the CMEX
+  mireadvar.
+ 
+  EXAMPLES
+ 
+   [ImSize, NumFrames, ImType] = ...
+     miinquire ('foobar.mnc', 'imagesize', ...
+                'dimlength', 'time', ...
+                'vartype', 'image');
+ 
+  puts the four-element vector of image dimension sizes into ImSize; 
+  the length of the time dimension into the scalar NumFrames; and the
+  type of the image variable into the string ImType.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf MIREADIMAGES} {\em  Read images from specified slice(s)/frame(s) of a MINC file.}
+\begin{verbatim}
+
+
+   images = mireadimages ('minc_file'[, slices[, frames[, options]]])
+
+
+\end{verbatim}
+
+   opens the given MINC file, and attempts to read whole images from
+   the slices and frames specified in the slices and frames vectors.
+   For the case of 128 x 128 images, the images are returned as the 
+   the columns of a 16384-row matrix, with the highest image dimension
+   varying the fastest.  That is, if x is the highest image dimension,
+   each contiguous block of 128 elements will correspond to one row
+   of the image.
+ 
+   To manipulate a single image as a 128x128 matrix, it is necessary
+   to extract the desired column (image), and then reshape it to the
+   appropriate size.  For example, to load all frames of slice 5, and 
+   then extract frame 7 of the file foobar.mnc:
+
+\begin{verbatim} 
+   >> images = mireadimages ('foobar.mnc', 4, 0:20);
+   >> frame7 = images (:, 7);
+   >> frame7 = reshape (frame7, 128, 128);
+\end{verbatim}
+ 
+   Note that mireadimages expects slice and frame numbers to be zero-
+   based!  Thus, frames 0 .. 20 of the MINC file are read into columns
+   1 .. 21 of the matrix images.
+ 
+   For most dynamic analyses, it will also be necessary to extract
+   the frame timing data.  This can be done using MIREADVAR.
+ 
+   Currently, only one of the vectors slices or frames can contain multiple
+   elements.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf MIREADVAR} {\em  Read a hyperslab of data from any variable in a MINC file.}
+\begin{verbatim}
+
+
+   data = mireadvars ('MINC_file', 'var_name', [, start, count[, options]])
+
+
+\end{verbatim}
+
+   Given vectors describing the starting corner (zero-based!) and edge
+   lengths, mireadvars reads an n-dimensional hyperslab from a MINC
+   (or NetCDF) file.  The data is returned as a MATLAB vector, with
+   the highest dimension of the variable changing fastest.
+  
+   The simplest (and intended) use of mireadvars is to read an entire
+   one-dimensional variable.  For example:
+ 
+     time = mireadvars ('foobar.mnc', 'time');
+ 
+   will read the entire contents of the variable 'time' from the file
+   foobar.mnc.  (If the start and count vectors are not given, they
+   default to reading the entire variable.  Currently, if start is
+   given, count must be given, and they must each have exactly one
+   element per dimension.)
+ 
+   A more complicated example is to use mireadvar as a low-rent
+   substitute for mireadimages.  For example, to read slice 5, frame 7
+   (note that these are 1-based, and mireadvar expects 0-based
+   indeces!) of foobar.mnc:
+ 
+     image = mireadvar ('foobar.mnc', 'image', [6 4 0 0], [1 1 128 128]);
+ 
+   The disadvantages of this approach are numerous.  First of all,
+   mireadimages will perform the scaling and shifting necessary to
+   transform the image data from scaled bytes or shorts (or however it
+   happens to be stored in the MINC file) to floating point values
+   representing the actual physical data.  Second, with mireadvar you
+   must know the exact order of the dimensions: in the above example,
+   "slice 5" corresponds to the 4 (note zero-based!) at position 2 of
+   the Start vector, and "frame 7" is the 6.  Also, you must know the
+   size of the image; mireadimages will handle anything, not just
+   128x128.  Finally, mireadimages provides greater flexibility with
+   respect to slice and frame selection.  With mireadvar, you can only
+   read contiguous ranges of slices and frames, and you must figure
+   out the start and count values for each dimension yourself.
+   Mireadimages, however, does all that work for you given just slice
+   and frame numbers.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf MIWRITEIMAGES} {\em  write images to a MINC file}
+\begin{verbatim}
+
+
+    miwriteimages (filename, images, slices, frames)
+
+
+\end{verbatim}
+
+   writes images (in the format as returned by mireadimages) to a MINC
+   file.  The MINC file must already exist and must have room for the 
+   data.  slices and frames only tell miwriteimages where to put the data
+   in the MINC file, they are not used to select certain columns from images.
+ 
+   Also, the slices and frames must be valid and consistent with the MINC
+   file, which must exist and have an image variable in it.  The number
+   of images to write (implied by the number of elements in slices or frames)
+   must be the same as the number of columns in the matrix images.  Since
+   miwriteimages only expects to be called by putimages, none of these
+   requirements are checked here -- all that is done by putimages.
+ 
+   Note that there is also a standalone executable miwriteimages; this 
+   is called by miwriteimages.m via a shell escape.  Neither of these
+   programs are meant for everyday use by the end user.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf NCONV} {\em  Convolution of two vectors with not necessarily unit spacing.}
+\begin{verbatim}
+
+
+ 	C = NCONV(A, B, spacing) convolves vectors A and B.  The resulting
+ 	vector is length LENGTH(A)+LENGTH(B)-1.
+
+
+\end{verbatim}
+
+        This routine is a replacement for MathWorks' conv function, 
+        which implicitly assumes that A and B are sampled with unit
+        spacing.  If you are dealing with two functions that are
+        unevenly sampled or sampled with different spacings, one or
+ 	both of them must be resampled to the same evenly spaced 
+ 	independent variable.  Then, if the spacing of the independent
+ 	variable is not 1, it should be passed to nconv.
+ 
+ 	See also CONV, XCORR, DECONV, CONV2, LOOKUP.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf NEWIMAGE} {\em  create a new MINC file, possibly descended from an old one}
+\begin{verbatim}
+
+
+   handle = newimage (NewFile, DimSizes, ParentFile, ...
+                      ImageType, ValidRange, DimOrder)
+
+
+\end{verbatim}
+
+  creates a new MINC file.  NewFile and DimSizes must always be given,
+  although the number of elements required in DimSizes varies
+  depending on whether ParentFile is given (see below).  All other
+  parameter are optional, and, if they are not included or are
+  empty, default to values sensible for PET studies at the MNI.
+ 
+  The optional arguments are:
+ 
+\begin{description}
+\item \code{ParentFile} - the name of an already existing MINC file.  If this
+                 is given, then a number of items are inherited from
+                 the parent file and included in the new file; note
+                 that this can possibly change the defaults of all
+                 following optional arguments.
+\end{description}
+ 
+\begin{description}
+\item \code{DimSizes}   - a vector containing the lengths of the image
+                 dimensions.  If ParentFile is not given, then all
+                 four image dimensions (in the order frames, slices,
+                 height, and width) must be specified.  Either or both
+                 of frames and slices may be zero, in which case the
+                 corresponding MINC dimension (MItime for frames, and
+                 one of MIzspace, MIyspace, or MIxspace for slices)
+                 will not be created.  If ParentFile is given, then
+                 only the number of frames and slices are required; if
+                 the height and width are not given, they will default
+                 to the height/width of the parent MINC file.  In no
+                 case can the height or width be zero -- these two
+                 dimensions must always exist in a MINC file.  See
+                 below, under "DimOrder", for details on how slices,
+                 width, and height are mapped to MIzspace, MIyspace,
+                 and MIxspace for the various conventional image
+                 viewpoints.
+\end{description}
+ 
+\begin{description}
+\item \code{ImageType}  - a string, containing a C-like type dictating how the
+                 image is to be stored.  Currently, this may be one of
+                 'byte', 'short', 'long', 'float', or 'double'; plans
+                 are afoot to add 'signed' and 'unsigned' options for
+                 the three integer types.  Currently, 'byte' images will
+                 be unsigned and 'short' and 'long' images will be
+                 signed.  If this option is empty or not supplied, it
+                 will default to 'byte'.  NOTE: this parameter is currently
+                 ignored.
+\end{description}
+                 
+\begin{description}
+\item \code{ValidRange} - a two-element vector describing the range of possible 
+                 values (which of course depends on ImageType).  If
+                 not provided, ValidRange defaults to the maximum
+                 range of ImageType, eg. [0 255] for byte, [-32768
+                 32767] for short, etc.  NOTE: this parameter is currently
+                 ignored.
+\end{description}
+ 
+\begin{description}
+\item \code{DimOrder}   - a string describing the orientation of the images,
+                 one of 'transverse' (the default), 'sagittal', or
+                 'coronal'.  Transverse images are the default if
+                 DimOrder is not supplied.  Recall that in the MINC
+                 standard, zspace, yspace, and xspace all have
+                 definite meanings with respect to the patient: z
+                 increases from inferior to superior, x from left to
+                 right, and y from posterior to anterior.  However,
+                 the concepts of slices, width, and height are
+                 relative to a set of images, and the three possible 
+                 image orientations each define a mapping from
+                 slices/width/height to zspace/yspace/xspace as
+                 follows:
+\end{description}
+ 
+                     Orientation  Slice dim    Height dim   Width dim
+                      transverse   MIzspace     MIyspace     MIxspace
+                      sagittal     MIxspace     MIzspace     MIyspace
+                      coronal      MIyspace     MIzspace     MIxspace
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf NFRAMEINT} {\em   integrate a function across a range of intervals (frames)}
+\begin{verbatim}
+
+
+    integrals = nframeint (ts, y, FrameStarts, FrameLengths)
+
+
+\end{verbatim}
+
+  calculates the integrals of a function (represented as a set of points
+  in y, sampled at the time points in ts) across each of a set of frames
+  which are given by their start times and lengths.  The integral is then
+  normalised so that nframeint returns the average value of y (as a function
+  of ts) across each frame.
+ 
+  ts and y must be vectors of the same length, as must FrameStarts and 
+  FrameLengths.  Normally, ts and y are a good deal longer than
+  FrameStarts and FrameLengths in order to get reasonably accurate 
+  results.  The returned variable, integrals, will be a vector of
+  the same length of FrameStarts and FrameLengths, containing the 
+  integral of y(ts) across each frame.
+ 
+  Points of y to integrate for each frame are selected by finding all
+  points of ts that are greater than the frame start time and less than
+  the frame stop time.  If possible, y is then linearly interpolated at
+  the frame start and stop times to form a closed interval.  Then, a
+  trapezoidal integration across those points is calculated, and the
+  integral is divided by the width of the interval across which y
+  is known within the frame.  Normally, this will simply be the length
+  of the frame.  However, it may be that the lowest value of ts is
+  greater than the frame start or the highest value of ts is lower than
+  the frame stop time.  In these cases, y is not known outside of the
+  frame, and cannot be resampled at the frame endpoints; so, the integration
+  will only be performed across known points, and the integral will
+  be divided not by the length of the frame but by the width of the interval
+  across which y is known.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf OPENIMAGE} {\em   setup appropriate variables in MATLAB for reading a MINC file}
+\begin{verbatim}
+
+
+   handle = openimage (filename)
+
+
+\end{verbatim}
+
+   Sets up a MINC file and prepares for reading.  This function
+   creates all variables required by subsequent get/put functions such
+   as getimages and putimages.  It also reads in various data about
+   the size and number of images on the file, all of which can be
+   queried via getimageinfo.
+ 
+   The value returned by openimage is a handle to be passed to getimages,
+   putimages, getimageinfo, etc.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf PUTIMAGES} {\em  Writes whole images to an open MINC file.}
+\begin{verbatim}
+
+
+       putimages (handle, images [, slices [, frames]])
+
+
+\end{verbatim}
+
+   writes images (a matrix with each column containing a whole image)
+   to the MINC file specified by handle, at the slices/frames specfied
+   by the slices/frames vectors.
+ 
+   Note that only one of the vectors slices or frames may have multiple
+   elements; ie., you may not write multiple slices and multiple frames
+   simultaneously.  (This should not be a problem, since you cannot *read*
+   multiple frames and slices simultaneously either.)  If both slices
+   and frames are present in the MINC file, then both slices and frames
+   vectors must be supplied and be non-empty.  If either of those 
+   dimensions are not present, though, then the associated vector must
+   be either omitted or empty.  
+ 
+   EXAMPLES
+     
+     To write zeros to an entire slice (say, 21 frames of slice 7) of
+     a full dynamic MINC file with 128x128 images [already opened with
+     handle = newimage (...)]:
+ 
+       images = zeros (16384,21);
+       putimages (handle, images, 7, 1:21);
+ 
+     To write random data to a single slice (7) of a non-dynamic file 
+     (again 128x128 images):
+ 
+       image = rand (16384, 1);
+       putimages (handle, image, 7);
+ 
+   SEE ALSO  newimage, openimage, getimages
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf RESAMPLEBLOOD} {\em  resample the blood activity in some new time domain}
+\begin{verbatim}
+
+
+   [new_g, new_ts] = resampleblood (handle, type[, samples])
+
+
+\end{verbatim}
+
+   reads the blood activity and sample timing data from the study
+   specified by handle, and resamples the activity data at times
+   specified by the string type.  Currently, type can be one of 'even'
+   or 'frame'.  For 'even', a new, evenly-spaced set of times will be
+   generated and used as the resampling times.  For 'frame', the mid
+   frame times will be used.  In either case, the resampled blood
+   activity is returned as new\_g, and the times used are returned as
+   new\_ts.
+ 
+   The optional argument samples specifies the number of samples
+   to take.  If it is not supplied, resampleblood will resample the
+   blood data at roughly 0.5 second intervals.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf SMOOTH} {\em  do a simple spatial smoothing on an image}
+\begin{verbatim}
+
+
+         new_data = smooth (old_data)
+
+
+\end{verbatim}
+
+  Smooths a two-dimensional image by averaging over a circle with a
+  diameter of 5 pixels.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf SPECTRAL} {\em Black-purple-blue-green-yellow-red-white color map.}
+\begin{verbatim}
+
+
+          map = spectral(num_colors)
+
+
+\end{verbatim}
+
+  SPECTRAL(M) returns an M-by-3 matrix containing a "spectral" colormap.
+  SPECTRAL, by itself, is the same length as the current colormap.
+ 
+  For example, to reset the colormap of the current figure:
+ 
+            colormap(spectral)
+ 
+  See also HSV, GRAY, PINK, HOT, COOL, BONE, COPPER, FLAG,
+           COLORMAP, RGBPLOT.
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf TEMPFILENAME} {\em generate a unique temporary filename}
+\begin{verbatim}
+
+
+          fname = tempfilename
+
+
+\end{verbatim}
+
+  Requires that a directory /tmp/ exists on the current machine.
+\endfunchelp
+
+%--------------------------------------
+
+\endfunchelp
+
+%--------------------------------------
+
+{\large\bf VIEWIMAGE} {\em  displays a PET image from a vector or square matrix.}
+\begin{verbatim}
+
+
+     [fig_handle, image_handle, bar_handle] = viewimage (img, colourbar_flag)
+
+
+\end{verbatim}
+
+   viewimage (img) sets the colourmap to spectral (the standard PET
+   colourmap) and uses MATLAB's image function to display the image.
+   Works on either SGI's or Xterminals, with colours dithered
+   to black and white on the Xterms.
+ 
+   Images are scaled so its high points are white and its low points black.
+ 
+   viewimage (img, colourbar\_flag) turns the colourbar on or off.
+   The default is on, but by specifying colourbar flag = 0, the
+   colourbar will be turned off.
+ 
+\endfunchelp
+
+%--------------------------------------
+

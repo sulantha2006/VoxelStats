@@ -1,0 +1,149 @@
+#########################################################################
+#
+# Makefile for EMMA on Windows, using Microsoft C++ and NMAKE.EXE
+# Usage: NMAME -f Makefile.msvc-win32
+#
+#########################################################################
+#
+# CUSTOMIZATION
+#
+# Root directory of MATLAB installation
+#
+MATLAB_ROOT = c:/Progra~1/MATLAB704
+#
+# Location of MINC and NetCDF library files
+#
+MINCLIB     = "c:/Docume~1/BertVi~1/MyDocu~1/BIC/lib"
+#
+# Location of MINC and NetCDF header files
+#
+MINCINC     = "c:/Docume~1/BertVi~1/MyDocu~1/BIC/include"
+
+#########################################################################
+# YOU SHOULD NOT HAVE TO CHANGE ANYTHING BELOW THIS LINE (I hope!)
+#
+MATLABINC   = $(MATLAB_ROOT)/extern/include
+MEX         = $(MATLAB_ROOT)/bin/win32/mex.bat
+#
+# Where to find the EMMA library and header files.  You shouldn't change these.
+#
+
+EMMAINC     = source/include
+EMMALIB     = lib
+
+INCLUDES = -I$(EMMAINC) \
+           -I$(MINCINC) \
+	   -I$(MATLABINC)
+	    
+DEFINES = -DDLL_NETCDF -Disnan=_isnan
+LIBDIRS  = -link -libpath:$(EMMALIB) -libpath:$(MINCLIB)
+
+.SUFFIXES: .obj .dll
+
+.c.obj:
+	$(CC) /MT $(CFLAGS) -c -Fo$*.obj $<
+
+.c.dll:
+
+.c.exe:
+	$(CC) /MT $(CFLAGS) -Fe$*.exe $< $(LIBS)
+
+# Options for compiling EMMA programs for Win32
+
+LIBS   = minc.lib netcdf.lib
+CC = cl /nologo
+
+MEXFILES = delaycorrect.dll \
+	lookup.dll \
+	miinquire.dll \
+	mireadimages.dll \
+	mireadvar.dll \
+	nfmins.dll \
+	nframeint.dll \
+	ntrapz.dll \
+	rescale.dll
+
+PROGS = bloodtonc.exe \
+	bldtobnc.exe \
+	includeblood.exe \
+	micreateimage.exe \
+	miwriteimages.exe \
+	miwritevar.exe \
+	miwriteatt.exe
+
+CFLAGS = $(INCLUDES) $(DEFINES)
+
+default: all
+
+all: $(PROGS) $(MEXFILES)
+
+LIBSRC = source/libsource/mincutil.c \
+         source/libsource/createnan.c \
+         source/libsource/mexutils.c \
+         source/libsource/intframes.c \
+         source/libsource/lookup12.c \
+         source/libsource/monotonic.c \
+         source/libsource/trapint.c
+
+LIBOBJ = $(LIBSRC:.c=.obj)
+
+$(EMMALIB)/emma.lib: $(LIBOBJ)
+	lib /out:$(EMMALIB)/emma.lib $(LIBOBJ)
+
+delaycorrect.dll: source/delaycorrect/delaycorrect.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+lookup.dll: source/lookup/lookup.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+miinquire.dll: source/miinquire/miinquire.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+mireadimages.dll: source/mireadimages/mireadimages.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+mireadvar.dll: source/mireadvar/mireadvar.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+nfmins.dll: source/nfmins/nfmins.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+nframeint.dll: source/nframeint/nframeint.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+ntrapz.dll: source/ntrapz/ntrapz.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+rescale.dll: source/rescale/rescale.c
+	mex -DDLL_NETCDF $(INCLUDES) $** $(LIBS)
+
+bloodtonc.exe: source/bloodtonc/bloodtonc.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+bldtobnc.exe: source/bldtobnc/bldtobnc.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+includeblood.exe: source/includeblood/includeblood.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+micreateimage.exe: source/micreateimage/micreateimage.obj \
+	source/micreateimage/dimensions.obj \
+	source/micreateimage/args.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+miwriteimages.exe: source/miwriteimages/miwriteimages.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+miwritevar.exe: source/miwritevar/miwritevar.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+miwriteatt.exe: source/miwriteatt/miwriteatt.obj
+	$(CC) /Fe$*.exe $** $(LIBS)
+
+$(PROGS) $(MEXFILES): $(EMMALIB)/emma.lib
+
+
+clean:
+	del /s *.obj
+	del /s *.exe
+	del /s *.dll

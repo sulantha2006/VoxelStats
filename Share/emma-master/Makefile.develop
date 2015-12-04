@@ -1,0 +1,19 @@
+# 
+# Options for SGI (IRIX 5).
+# 
+# Development version - not to be included in EMMA distributions.
+#
+# $Id: Makefile.develop,v 1.4 2008-01-11 01:58:29 claude Exp $
+#
+
+RANLIB      = 
+MEX_EXT     = mexsg
+CMEX_LIBS   = -lemma $(MINCLIBS) -lm
+XDR_LIB     = 
+CC          = cc
+
+# Options for the MIPS C compiler.  CMEX_OPT is for CMEX programs,
+# STD_OPT is for standalone programs.
+
+CFLAGS_MEX  = -g -prototypes -fullwarn
+CFLAGS_STD  = -g -prototypes -fullwarn

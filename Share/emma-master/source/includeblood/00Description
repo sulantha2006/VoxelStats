@@ -1,0 +1,12 @@
+/* ----------------------------------------------------------------------------
+@NAME       : includeblood
+@INPUT      : A BNC (Blood NetCDF) file containing the blood data.
+              This is a netCDF file that is similar in format to the
+              MINC format.
+@OUTPUT     : A MINC file.
+@DESCRIPTION: Copies the blood data from the BNC file to the MINC
+              file.  This allows inclusion of blood data directly in
+              the study file, keeping all data together.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */

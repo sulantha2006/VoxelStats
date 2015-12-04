@@ -1,0 +1,15 @@
+/* ----------------------------------------------------------------------------
+@NAME       : mireadimages
+@DESCRIPTION: Opens the given MINC file, and attempts to read whole
+              images from the slices and frames specified in the
+              slices and frames vectors.  For the case of 128 x 128
+              images, the images are returned as the columns of a
+              16384-row matrix, with the highest image dimension
+              varying the fastest.  That is, if x is the highest image
+              dimension, each contiguous block of 128 elements will
+              correspond to one row of the image.
+@TYPE       : CMEX file to be dynamically linked by MATLAB
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
+

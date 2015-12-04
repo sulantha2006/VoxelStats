@@ -1,0 +1,6 @@
+/* ----------------------------------------------------------------------------
+@NAME       : delaycorrect
+@DESCRIPTION: Performs delay correction on blood data for an rCBF study.
+@TYPE       : CMEX file to be dynamically linked by MATLAB
+@LIBRARIES  : EMMA
+---------------------------------------------------------------------------- */

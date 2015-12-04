@@ -1,0 +1,204 @@
+The following must be completed in order to implement a two-compartment
+rCBF model in Matlab:
+
+1) Get the most recent articles on performing two-compartment analysis
+   that includes solving for V0.
+
+   COMPLETED ON: July 5, 1993
+
+   STATUS: Solving for V0 as well as K1 and k2 seems quite straight
+           forward, and should be no more difficult than solving for
+           K1 and k2.  We will use the triple weighted integration
+           method, either applied directly, or by using Hiroto's
+           more elegant modification.
+
+
+Although the desired final product is a package that solves for K1, k2 and
+V0, it is easier to start by neglecting V0, delay, and dispersion.  In order
+to perform the analysis while ignoring V0, the following must be completed:
+
+2) Create a Matlab routine that generates the rR lookup table.  This lookup
+   table is used to find a value for k2 at each pixel, and should be 100x1
+   (100 values of rR corresponding to values of k2 from 0.01 minutes to
+   1 minute).
+
+   COMPLETED ON: June 25, 1993
+
+   STATUS: June 29, 1993: Overhauled the function since we realized that
+			  the convolution was not being performed correctly.
+			  The function now creates evenly sampled data sets
+			  for the purpose of convolution, convolutes, and then
+			  re-samples back to the original sample spacing.  We
+			  discovered that unevenly sampled data sets did not
+			  convolute correctly.
+	   June 25, 1993: Completed.
+           June 21, 1993: Created an rR lookup table with Matlab, but not
+                          an actual .m file.  However, all of the commands
+			  used were saved in a matlab diary.
+
+3) Create a Matlab routine that calculates a value for rL.  Since there is a
+   different value of rL for each pixel in the image, rL should be 16384x1 for
+   every slice.
+
+   COMPLETED ON: June 21, 1993
+
+   STATUS: Completed.
+
+4) Create a Matlab routine that integrates the above two routines by 
+   using the look-up table to find an approximation for k2.  This
+   routine can probably also calculate K1 since this is straight
+   forward once k2 is known.  This routine should probably just take
+   a handle to an input data set, and a handle to an output data set.
+
+   COMPLETED ON: July 2, 1993
+
+   STATUS: July  5, 1993: Worked out the correct units for K1 and k2.
+                          K1 was being expressed as:
+                          (nCi * sec * (g blood)) / ((mL tissue) * counts * sec)
+                          It should be expressed as:
+                          (mL blood) / ((g tissue) * minute)
+                          k2 was being expressed as s^-1, and should be
+                          expressed as min^-1.
+           June 30, 1993: Routine now calculates a K1 image as well as
+                          a k2 image.  However, while this image appears
+                          qualitatively similar to a K1 image produced
+                          by Jin's K1_image_auto.for, the values themselves
+			  are off by a little more than four orders of
+			  magnitude.
+           June 25, 1993: A .m file exists, but it is very rudimentary.
+                          Data for a k2 image is generated, but no
+                          K1 image is generated.
+           June 21, 1993: Played around with getting values for k2 by
+                          using the above two functions.  No actual
+                          .m file exists yet, but once again all of
+  			  the commands used were saved in a matlab
+			  diary.
+
+The above three routines will provide an rCBF package that does not take
+V0, delay or dispersion into account.
+
+We are currently adding delay and dispersion correction to the
+above routines, and from there we will move on to performing
+an analysis that also solves for V0.
+
+
+The steps for finding the delay constant delta are:
+
+1) Find A(t) by:
+      i) integrating a slice across its frames, and then selecting
+         all pixels that have a value greater than 1.8 times the mean of
+         the integrated image.
+     ii) allow the user to interactively adjust the mask by selecting a 
+         new scale factor.
+    iii) use pixels selected by the above procedure as a mask applied to
+         every frame in the slice, and then calculate the mean of each
+         image.  The resulting values are used as A(t).
+
+   COMPLETED ON: July 16, 1993
+
+   STATUS: July 16,1993: Finished
+           July 9, 1993: Wrote a Matlab script that implements the above
+                         three steps and uses getmask.m.
+           July 7, 1993: Created getmask.m.  This function handles the second
+                         part of the above by displaying the image, and
+                         allowing the user to interactively adjust the scale
+                         factor.  getmask returns the resulting mask as
+                         0's and 1's.
+
+2) Use A(t) to do a least squares fit to the blood delay and dispersion
+   equation.
+
+   COMPLETED ON: August 1, 1993
+
+   STATUS: Aug. 1, 1993: Completed.  The dispersion correction problem
+                         was resolved by converting the routine currently
+                         used by the FORTRAN K1 image generation program
+                         to Matlab.  The delay correction was not changed,
+                         except by using a better (trapezoidal) integration
+                         routine.  Unfortunately, the curve fitting procedure
+                         is now very slow, and this must be solved.
+           July 16,1993: After satisfying ourselves that the stepwise 
+                         fitting method described below gave reasonable
+                         results, we decided to add dispersion
+                         correction.  Implementation was quite easy,
+                         but unfortunately adding dispersion correction
+                         made things worse.  The blood curve no longer
+                         followed the brain curve closely.
+           July 15,1993: In order to try and solve the overdetermination
+                         problem, we have taken a stepwise incrementation
+                         approach to finding delta.  We choose a value
+                         of delta, and peform the curve fit while holding
+                         delta constant.  We then choose a new value of
+                         delta, and perform the three term curve fit again
+                         (for alpha, beta, and gamma).  After having
+                         performed the fit for several values of delta, we
+                         choose the fit that produced the least amount of
+                         error.  At the moment, we are stepping through
+                         delta with increments of 1 second.
+           July 12,1993: Found that the curve fitting problem seems to be
+                         overdetermined.  We can find several values of 
+                         alpha, beta, gamma, and delta that give good curve
+                         fits.
+           July 9, 1993: Performed the least squares fit without taking
+                         dispersion into account.  The fit along the rising
+                         slope was very good, but at the top of the slope
+                         the fit function exploded.  We do have some ideas
+                         for solving this problem, however.
+           July 7, 1993: Took a first pass look at least squares fitting
+                         in general, and the matlab functions that support
+                         it in particular.
+
+
+In order to complete two-compartment rCBF analysis, we must:
+
+1) Calculate the delay and dispersion constants, and apply these as
+   corrections to the blood data used in our analysis.  Please see the
+   previous section for details on this step.
+
+2) Perform a full two-compartment analysis that returns K1, k2, and V0
+   using the triple-weighted integration method.
+
+   COMPLETED ON: 
+
+   STATUS: Aug. 1, 1993: Our implementation is currently undergoing
+                         verification.  See below.
+           July 20,1993: Investigated the problems with the first pass
+                         attempt.  Since our implementation of the three-
+                         weighted method grew out of an implementation of
+                         the two-weighted method, there were some
+                         assumptions carried over that turned out invalid
+                         (for example, it did not make sense to clip
+                         negative values in the left hand quotient).  We
+                         managed to create a K1 image, but had initial
+                         difficulties since the values outside the brain
+                         had a much larger range than the values inside
+                         the brain.  Therefore, viewimage was mapping all of
+                         the values inside the brain to the same colour.
+                         We applied a mask that eliminated values outside
+                         brain in order to solve this problem.
+           July 16,1993: Wrote a first pass attempt at solving the triple-
+                         weighted integration problem.  Had limited success.
+
+3) Validate our method and implementation by submitting known data to
+   Matlab analysis, and performing the same calculations by hand.
+
+   COMPLETED ON: 
+
+   STATUS: Aug. 1, 1993: Underway.
+
+4) Complete documentation of the rCBF analysis package.
+
+   COMPLETED ON: 
+
+   STATUS: Aug. 1, 1993: Documentation is started.  Full descriptions have
+                         been added to every Matlab function called, and
+                         a program has been created that formats Matlab
+                         help with LaTeX.  Therefore, documentation of the
+                         individual functions has been completed.  However,
+                         since this package is intended to in part act as
+                         a tutorial on writing large Matlab packages, we
+                         require a full explanation of our methodology.
+                         We must pay particular attention to memory
+                         management.
+
+

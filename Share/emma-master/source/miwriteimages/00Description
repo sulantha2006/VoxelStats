@@ -1,0 +1,11 @@
+/* ----------------------------------------------------------------------------
+@NAME       : miwriteimages
+@DESCRIPTION: Reads images from a temporary file, and writes them into
+              the specified MINC file.  This may seem like a very
+	      convoluted way of getting things done, but writing to
+	      files from CMEX was making MATLAB crash.
+@TYPE       : Stand-alone executable.
+@LIBRARIES  : netCDF
+              MINC
+---------------------------------------------------------------------------- */
+

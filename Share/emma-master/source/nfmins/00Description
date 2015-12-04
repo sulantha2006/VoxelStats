@@ -1,0 +1,8 @@
+/* ----------------------------------------------------------------------------
+@NAME       : nfmins
+@DESCRIPTION: Finds a function minimum using the simplex search method.
+              This CMEX function is completely equivalent to the MATLAB
+	      fmins function (but about two orders of magnitude faster).
+@TYPE       : CMEX file to be dynamically linked by MATLAB
+@LIBRARIES  : EMMA
+---------------------------------------------------------------------------- */

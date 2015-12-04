@@ -1,0 +1,129 @@
+#
+# Site-specific configuration for EMMA.  Note: this file must be
+# included by a makefile that has already defined EMMA_ROOT, which must
+# either be empty or a directory with a trailing slash.
+#
+# $Id: Makefile.site,v 1.10 2008-01-11 15:44:18 claude Exp $
+#
+
+SHELL       = /bin/sh
+
+#
+# Change this to reflect your machine type.  Possible machine types
+# are irix4, irix5, sun4, linux, and develop (note that develop is not
+# meant for general usage; it's just what we use when working on
+# EMMA).
+#
+
+ifneq ($(findstring IRIX,$(shell uname)),)
+  MACHINE     = irix6
+else
+  ifneq ($(findstring Linux,$(shell uname)),)
+    MACHINE     = linux
+  else
+    ifneq ($(findstring Darwin,$(shell uname)),)
+      MACHINE     = macosx
+    else
+      ifneq ($(findstring SunOS,$(shell uname)),)
+        MACHINE     = sun4
+      else
+        MACHINE     = 
+      endif
+    endif
+  endif
+endif
+
+# 
+# If you need to define any preprocessor tokens, go ahead and do it here.
+#
+
+DEFINES     =
+
+# 
+# MATLAB stuff: the root directory of the MATLAB installation, as well
+# as various things found under it (headers for building MEX programs
+# and the cmex script).
+# 
+# MEX is the script used to compile CMEX programs.  The default,
+# bin/cmex under the MATLAB root directory, is for MATLAB 4.  For MATLAB
+# 5, you'll have to use the commented-out version (the script is called
+# 'mex', and the -V4 flag is required to compile EMMA's CMEX code).
+#
+
+MATLAB_ROOT = /usr/local/matlab
+MATLABINC   = $(MATLAB_ROOT)/extern/include
+# for MATLAB 4:
+# MEX         = $(MATLAB_ROOT)/bin/cmex
+# MEX_FLAGS   = 
+# for MATLAB 5 and 6:
+MEX         = $(MATLAB_ROOT)/bin/mex
+MEX_FLAGS   = 
+
+
+# 
+# Where to search for the MINC and NetCDF library and header files.
+# These are just inserted into the compiler command lines as needed, so
+# if MINC and NetCDF are in different directories, you can add more -L
+# or -I options as needed.
+#
+
+MINC_BASE = 2
+
+MINCLIBPATH = -L/usr/local/lib
+MINCINCPATH = -I/usr/local/include
+
+ifeq ($(MINC_BASE),2)
+  MINCLIBS = -lminc2 -lnetcdf -lhdf5 -lz
+  DEFINES += -DMINC2
+else
+  MINCLIBS = -lminc -lnetcdf
+endif
+
+#
+# Where to find the EMMA library and header files.  You shouldn't change these.
+#
+
+EMMAINC     = $(EMMA_ROOT)source/include
+EMMALIB     = $(EMMA_ROOT)lib
+
+
+
+#
+# These are directories where the various components of EMMA will be
+# installed.  All MATLAB files (*.m and CMEX) will be copied there;
+# there are quite a lot of them, so the default is to give EMMA its own
+# directory, $(MATLAB_ROOT)/toolbox/emma.  You will have to add this
+# directory to the default MATLAB path by putting the line
+#
+#  path(path, '/usr/local/matlab/toolbox/emma');
+#
+# in your matlabrc.m file.  (This file lives in $(MATLAB_ROOT)/toolbox/local.)
+#
+# The standalone binaries and documentation go, respectively, to
+# BIN_INSTALL_DIR and DOC_INSTALL_DIR.
+#
+
+MATLAB_INSTALL_DIR = $(MATLAB_ROOT)/toolbox/emma
+BIN_INSTALL_DIR    = /usr/local/bin
+DOC_INSTALL_DIR    = /usr/local/doc
+
+
+# 
+# Finally, these are compiler/linker options based on the above
+# directories.  These almost certainly won't need to be changed; they're
+# just here for easy propagation to lower-level makefiles, and to
+# provide an easy place to add directories if necessary.
+#
+
+INCLUDES = -I$(EMMAINC) \
+             $(MINCINCPATH)
+
+LIBDIRS  = -L$(EMMALIB) \
+             $(MINCLIBPATH)
+
+#
+# Now include the architecture-dependent options, such as compiler,
+# compiler options, libraries, etc.
+#
+
+include $(EMMA_ROOT)Makefile.$(MACHINE)
