@@ -20,6 +20,6 @@
     EMMA Toolkit - https://github.com/BIC-MNI/emma
     Tools for NIfTI and ANALYZE image - http://www.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
 
-    Package requirements : 
+    Package requirements for MINC operations: 
     MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
 
