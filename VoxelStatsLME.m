@@ -15,7 +15,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
     usedVarsStr = {};
     s = stringModel;
     while true
-        [str, s] = strtok(s, '+|-*()~ ');
+        [str, s] = strtok(s, '+|-:*()~ ');
         if isempty(str),  break;  end
         if all(ismember(str, '0123456789+-.eEdD')), continue; end
         if ismember(str, usedVarsStr), continue; end
