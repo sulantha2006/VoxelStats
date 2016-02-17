@@ -1,5 +1,6 @@
     VoxelStats v1.0 - voxelwise genaralized linear modeling for MINC2, Nifti-1 and ANALYZE images. 
     COPYRIGHT:      Copyright 2015  Sulantha Mathotaarachchi
+                    Translational Neuroimaging Laboratory,
                     McGill University Research Center for Studies in Aging,
                     Douglas Mental Health University Institute,
                     McConnell Brain Imaging Center,
