@@ -1,4 +1,4 @@
-function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupColumnName, mask_file, includeString )
+function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupColumnName, mask_file, includeString, multiVarOperation )
     functionTimer = tic;
     mainDataTable = readtable(inputTable);
 
@@ -27,6 +27,14 @@ function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupC
     thStruct = zeros(numOfModels,1);
     tprStruct = zeros(numOfModels,1);
     fprStruct = zeros(numOfModels,1);
+    
+    %%Do multi value operations if specified
+    if nargin > 6 
+        operation = multiVarOperation;
+        str = strcat('multiVarData = multiVarData', operation, ';');
+        eval([str]);
+    end
+    
     fprintf('Analysis Starting: \n');
     analysisTimer = tic;
 
