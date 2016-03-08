@@ -1,5 +1,6 @@
     VoxelStats v1.0 - voxelwise genaralized linear modeling for MINC2, Nifti-1 and ANALYZE images. 
     COPYRIGHT:      Copyright 2015  Sulantha Mathotaarachchi
+                    Translational Neuroimaging Laboratory,
                     McGill University Research Center for Studies in Aging,
                     Douglas Mental Health University Institute,
                     McConnell Brain Imaging Center,
@@ -7,9 +8,9 @@
                     McGill University, Montreal, Quebec, Canada.
                     mathotaarachchi.mathotaarachchi@mail.mcgill.ca, pedro.rosa@mcgill.ca
              
-                    Permission to use, and copy this software and its documentation for any purpose and without fee
+                    Permission to use, and copy this software and its documentation for any non-commercial purpose and without fee
                     is hereby granted, provided that the above copyright notice appear in all copies.
-                    Modification and redistribution need to be authorized by the author. 
+                    Comercial, government or military organizations who wish to use the software needs permission from the author.                           Any Modification and redistribution need to be authorized by the author. 
                     External library packages bundled with this software are covered 
                     and goverened by thier own copyright notice. 
                     The authors and McGill University make no representations about the suitability of this
