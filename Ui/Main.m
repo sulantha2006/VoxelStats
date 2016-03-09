@@ -151,7 +151,7 @@ function Main()
     'String', 'Save','units', 'normalized', 'Position', [0.55 0.1 0.39 0.28], 'CallBack', {@saveRes, 'roc'}) ;
 
     lblStatus = uicontrol('Tag', 'lblStatus','Parent', f, 'Style', 'text', 'String', ...
-    'VoxelStats v1.1 - Idle', 'HorizontalAlignment', 'left', 'units', 'normalized', 'Position', [0.01 0.0 0.9 0.05]) ;
+    'VoxelStats v1.1 - Idle', 'HorizontalAlignment', 'left', 'units', 'normalized', 'Position', [0.01 0.0 0.4 0.05]) ;
     
     handles = guihandles(f);
     guidata(f, handles)
