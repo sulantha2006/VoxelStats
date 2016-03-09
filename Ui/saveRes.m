@@ -1,24 +1,24 @@
 function saveRes( hObject,eventdata, type )
     handles = guidata(hObject);
     imageType_s = get(handles.chooseImageType, 'String');
-    imageType = imageType_s(get(handles.chooseImageType, 'Value'));
+    imageType = imageType_s{get(handles.chooseImageType, 'Value')};
     maskFile = get(handles.txtMaskFile, 'String');
     switch type
         case 'lm'
             est_s = get(handles.chooseEst_lm, 'String');
-            est = est_s(get(handles.chooseEst_lm, 'Value'));
+            est = est_s{get(handles.chooseEst_lm, 'Value')};
             var_s = get(handles.chooseVarName_lm, 'String');
-            var = var_s(get(handles.chooseVarName_lm, 'String'));
+            var = var_s{get(handles.chooseVarName_lm, 'String')};
             data = eval([handles.c_data.est.var]);
         case 'glm'
             est_s = get(handles.chooseEst_glm, 'String');
-            est = est_s(get(handles.chooseEst_glm, 'Value'));
+            est = est_s{get(handles.chooseEst_glm, 'Value')};
             var_s = get(handles.chooseVarName_glm, 'String');
-            var = var_s(get(handles.chooseVarName_glm, 'String'));
+            var = var_s{get(handles.chooseVarName_glm, 'String')};
             data = eval([handles.c_data.est.var]);
         case 'roc'
             est_s = get(handles.chooseEst_roc, 'String');
-            est = est_s(get(handles.chooseEst_roc, 'Value'));
+            est = est_s{get(handles.chooseEst_roc, 'Value')};
             data = eval([handles.c_data.est]);
     end
     switch imageType

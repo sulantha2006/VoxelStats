@@ -6,7 +6,7 @@ function runVS(hObject,eventdata, type)
     filterStr  = get(handles.txtFilter, 'String');
     maskFile = get(handles.txtMaskFile, 'String');
     imageType_s = get(handles.chooseImageType, 'String');
-    imageType = imageType_s(get(handles.chooseImageType, 'Value'));
+    imageType = imageType_s{get(handles.chooseImageType, 'Value')}
     
     switch type
         case 'lm'
