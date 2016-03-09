@@ -58,8 +58,8 @@ function runVS(hObject,eventdata, type)
             newfields = fieldnames(intVars);
             set(handles.chooseVarName_lm, 'String', newfields);
             
-            set(hanldes.txtRftVoxelNum_lm, 'String', handles.voxel_num);
-            set(hanldes.txtRftDF_lm, 'String', handles.df);
+            set(handles.txtRftVoxelNum_lm, 'String', handles.voxel_num);
+            set(handles.txtRftDF_lm, 'String', handles.df);
             
         case 'glm'
             str_selection_s = get(handles.chooseEst_glm, 'String');
@@ -68,8 +68,8 @@ function runVS(hObject,eventdata, type)
             newfields = fieldnames(intVars);
             set(handles.chooseVarName_glm, 'String', newfields);
             
-            set(hanldes.txtRftVoxelNum_glm, 'String', handles.voxel_num);
-            set(hanldes.txtRftDF_glm, 'String', handles.df);
+            set(handles.txtRftVoxelNum_glm, 'String', handles.voxel_num);
+            set(handles.txtRftDF_glm, 'String', handles.df);
             
     guidata(hObject, handles);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');
