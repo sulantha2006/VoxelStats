@@ -54,6 +54,7 @@ function runVS(hObject,eventdata, type)
             set(handles.chooseEst_roc, 'String', fieldnames(c_struct));
     end
     handles.c_data = c_struct;
+    handles.image_dims = [slices_p, image_height_p image_width_p];
     guidata(hObject, handles);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');
 end
