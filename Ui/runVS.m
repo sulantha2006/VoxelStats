@@ -22,6 +22,11 @@ function runVS(hObject,eventdata, type)
                     VoxelStatsLM(imageType, model_str, csvFile, maskFile, multi_vars, cat_vars, filterStr);
             end
             set(handles.chooseEst_lm, 'String', fieldnames(c_struct));
+            str_selection_s = get(handles.chooseEst_lm, 'String');
+            str_selection = str_selection_s{get(handles.chooseEst_lm, 'Value')};
+            intVars = eval(['handles.c_data.' str_selection]);
+            newfields = fieldnames(intVars);
+            set(handles.chooseVarName_lm, 'String', newfields);
         case 'glm'
             model_str = get(handles.txtModel_glm, 'String');
             multi_vars = strsplit(strrep(get(handles.txtMultVar_glm, 'String'), ' ', ''), {','});
@@ -37,6 +42,11 @@ function runVS(hObject,eventdata, type)
                     VoxelStatsGLM(imageType, model_str, distrib, csvFile, maskFile, multi_vars, cat_vars, filterStr);
             end
             set(handles.chooseEst_glm, 'String', fieldnames(c_struct));
+            str_selection_s = get(handles.chooseEst_glm, 'String');
+            str_selection = str_selection_s{get(handles.chooseEst_glm, 'Value')};
+            intVars = eval(['handles.c_data.' str_selection]);
+            newfields = fieldnames(intVars);
+            set(handles.chooseVarName_glm, 'String', newfields);
         case 'roc'
             dataCol = get(handles.txtDataCol_roc, 'String');
             groupingCol = get(handles.txtGroupCol_roc, 'String');
