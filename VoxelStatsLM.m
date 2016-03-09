@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = VoxelStatsLM( imageType, stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df] = VoxelStatsLM( imageType, stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
     functionTimer = tic;
     mainDataTable = readtable(data_file);
 
@@ -57,6 +57,9 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars] = Voxe
     varsInRegressionNames = templm.CoefficientNames;
     nVarsInRegression = length(varsInRegressionNames);
     %%Done one voxel fitlm
+    
+    voxel_num = sum(sum(mask_slices));
+    df = templm.DFE;
 
     %Number of Analysis
     numOfModels = sum(sum(mask_slices));
