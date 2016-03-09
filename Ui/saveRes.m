@@ -8,18 +8,18 @@ function saveRes( hObject,eventdata, type )
             est_s = get(handles.chooseEst_lm, 'String');
             est = est_s{get(handles.chooseEst_lm, 'Value')};
             var_s = get(handles.chooseVarName_lm, 'String');
-            var = var_s{get(handles.chooseVarName_lm, 'String')};
-            data = eval([handles.c_data.est.var]);
+            var = var_s{get(handles.chooseVarName_lm, 'Value')};
+            data = eval(['handles.c_data.' est '.' var]);
         case 'glm'
             est_s = get(handles.chooseEst_glm, 'String');
             est = est_s{get(handles.chooseEst_glm, 'Value')};
             var_s = get(handles.chooseVarName_glm, 'String');
-            var = var_s{get(handles.chooseVarName_glm, 'String')};
-            data = eval([handles.c_data.est.var]);
+            var = var_s{get(handles.chooseVarName_glm, 'Value')};
+            data = eval(['handles.c_data.' est '.' var]);
         case 'roc'
             est_s = get(handles.chooseEst_roc, 'String');
             est = est_s{get(handles.chooseEst_roc, 'Value')};
-            data = eval([handles.c_data.est]);
+            data = eval(['handles.c_data.' est]);
     end
     switch imageType
         case 'minc'

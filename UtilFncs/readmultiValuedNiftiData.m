@@ -16,7 +16,7 @@ function [resultMat] = readmultiValuedNiftiData( subjectList, totalSlices, mask_
                     continue;
                 else
                     fprintf('File reading failed and connot recover. ')
-                    exit
+                    %exit
                 end
             end
         end
