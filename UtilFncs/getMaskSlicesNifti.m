@@ -18,6 +18,7 @@ function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = get
         mask_height = mask.hdr.dime.dim(3);
         mask_width = mask.hdr.dime.dim(2);
         mask_slices_t = reshape(mask.img, [], mask_slices_n);
+        voxel_dims = [mask.hdr.dime.pixdim(2), mask.hdr.dime.pixdim(3), mask.hdr.dime.pixdim(4)];
         fprintf('Done...\n');
     end
     mask_slices = mask_slices_t > 0;

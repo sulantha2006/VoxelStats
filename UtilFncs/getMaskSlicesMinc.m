@@ -18,6 +18,7 @@ function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = get
         mask_height = getimageinfo(mask, 'ImageHeight');
         mask_width = getimageinfo(mask, 'ImageWidth');
         mask_slices_t = getimages(mask, 1:mask_slices_n);
+        voxel_dims = getimageinfo(openimage(maskFile), 'Steps');
         fprintf('Done...\n');
     end
     mask_slices = mask_slices_t > 0.9;
