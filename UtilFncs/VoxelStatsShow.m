@@ -1,6 +1,6 @@
 function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
 
-    figure_layout_width_slices = 6;
+    figure_layout_width_slices = 8;
     figure_layout_height_slices = 4;
 
     image_slices_n = image_dims(1);
@@ -31,17 +31,22 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
         end
     end
     
-    xSlice_avg = imresize(mean(stats_mat_3d, 1), [image_height_n_rs, image_slices_n_rs]);
-    ySlice_avg = imresize(mean(stats_mat_3d, 2), [image_slices_n_rs, image_width_n_rs]);
-    zSlice_avg = imresize(mean(stats_mat_3d, 3), [image_height_n_rs, image_width_n_rs]);
+    xSlice_avg = imresize(squeeze(mean(stats_mat_3d, 1)), [image_width_n_rs, image_slices_n_rs]);
+    ySlice_avg = imresize(squeeze(mean(stats_mat_3d, 2)), [image_height_n_rs, image_slices_n_rs]);
+    zSlice_avg = imresize(squeeze(mean(stats_mat_3d, 3)), [image_height_n_rs, image_width_n_rs]);
     
-    figure('Name','Voxel Stats Show')
+    fig = figure('Name','Voxel Stats Show');
+    set(fig, 'PaperPositionMode', 'auto');
+    set(fig, 'position', [300, 300, 1120, 840]);
     subplot(3,3,1)
-    imagesc(xSlice_avg);
+    imagesc(rot90(xSlice_avg));
+    axis equal;axis off;  
     subplot(3,3,2)
-    imagesc(ySlice_avg);
+    imagesc(rot90(ySlice_avg));
+    axis equal;axis off;  
     subplot(3,3,3)
-    imagesc(zSlice_avg);
+    imagesc(flipud(fliplr(zSlice_avg)));
+    axis equal;axis off;  
     subplot(3,3,4:9)
     imagesc(rot90(image_mat,2)); 
     c=colorbar; colormap(spectral(256));
