@@ -11,6 +11,7 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
     voxel_height = voxel_dims(2);
     voxel_width = voxel_dims(3);
     
+    image_slices_n_rs = ceil(image_slices_n*slice_length);
     image_height_n_rs = ceil(image_height_n*voxel_height);
     image_width_n_rs = ceil(image_width_n*voxel_width);
 
@@ -30,7 +31,18 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
         end
     end
     
+    xSlice_avg = imresize(mean(stats_mat_3d, 1), [image_height_n_rs, image_slices_n_rs]);
+    ySlice_avg = imresize(mean(stats_mat_3d, 2), [image_slices_n_rs, image_width_n_rs]);
+    zSlice_avg = imresize(mean(stats_mat_3d, 3), [image_height_n_rs, image_width_n_rs]);
+    
     figure('Name','Voxel Stats Show')
+    subplot(3,3,1)
+    imagesc(xSlice_avg);
+    subplot(3,3,2)
+    imagesc(ySlice_avg);
+    subplot(3,3,3)
+    imagesc(zSlice_avg);
+    subplot(3,3,4:9)
     imagesc(rot90(image_mat,2)); 
     c=colorbar; colormap(spectral(256));
     axis equal; axis off;  
