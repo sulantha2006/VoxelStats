@@ -19,7 +19,7 @@ function VoxelStatsShow( stat_mat, image_dims )
     for i = 1:figure_layout_height_slices
         for j = 1:figure_layout_width_slices
             image_mat(image_height_n*(i-1)+1:image_height_n*i,image_width_n*(j-1)+1:image_width_n*j) = stats_mat_3d(:,:,slice_start+slices_count*slice_spacing);
-            slice_count = slice_count +1;
+            slices_count = slices_count +1;
         end
     end
 
