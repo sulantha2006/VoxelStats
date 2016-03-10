@@ -21,6 +21,7 @@ function runVS(hObject,eventdata, type)
                 [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df, voxel_dims]  = ... 
                     VoxelStatsLM(imageType, model_str, csvFile, maskFile, multi_vars, cat_vars, filterStr);
             end
+            set(handles.chooseEst_lm,'Value',1); 
             set(handles.chooseEst_lm, 'String', fieldnames(c_struct));
             handles.image_dims = [slices_p, image_height_p image_width_p];
             handles.voxel_num = voxel_num;
@@ -40,6 +41,7 @@ function runVS(hObject,eventdata, type)
                 [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df, voxel_dims]  = ... 
                     VoxelStatsGLM(imageType, model_str, distrib, csvFile, maskFile, multi_vars, cat_vars, filterStr);
             end
+            set(handles.chooseEst_glm,'Value',1); 
             set(handles.chooseEst_glm, 'String', fieldnames(c_struct));
             handles.image_dims = [slices_p, image_height_p image_width_p];
             handles.voxel_num = voxel_num;
@@ -49,6 +51,7 @@ function runVS(hObject,eventdata, type)
             dataCol = get(handles.txtDataCol_roc, 'String');
             groupingCol = get(handles.txtGroupCol_roc, 'String');
             c_struct = VoxelStatsROC(imageType, csvFile, dataCol, groupingCol, maskFile, filterStr);
+            set(handles.chooseEst_roc,'Value',1); 
             set(handles.chooseEst_roc, 'String', fieldnames(c_struct));
     end
     handles.c_data = c_struct;
