@@ -32,7 +32,7 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
     
     figure('Name','Voxel Stats Show')
     imagesc(rot90(image_mat,2)); 
-    colorbar; colormap(spectral(256));
+    c=colorbar; colormap(spectral(256));
     axis equal; axis off;  
     background='white';
     whitebg(gcf,background);
