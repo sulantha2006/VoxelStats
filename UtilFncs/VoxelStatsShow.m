@@ -37,6 +37,11 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
     background='white';
     whitebg(gcf,background);
     set(gcf,'Color',background,'InvertHardcopy','off');
-
+    ax = gcf;
+    axpos = ax.Position;
+    cpos = c.Position;
+    cpos(3) = 0.5*cpos(3);
+    c.Position = cpos;
+    ax.Position = axpos;
 end
 
