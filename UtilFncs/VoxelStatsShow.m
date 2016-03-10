@@ -12,7 +12,7 @@ function VoxelStatsShow( stat_mat, image_dims )
     slice_spacing = floor(slices_showing_n/(figure_layout_width_slices*figure_layout_height_slices));
     image_mat = zeros(image_height_n*3, image_width_n*4);
 
-    stats_mat_3d_t = reshape(stats_mat, image_width_n , image_height_n, image_slices_n);
+    stats_mat_3d_t = reshape(stat_mat, image_width_n , image_height_n, image_slices_n);
     stats_mat_3d = permute(stats_mat_3d_t, [2,1,3]);
 
     slices_count = 0;
