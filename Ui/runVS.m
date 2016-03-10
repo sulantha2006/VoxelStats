@@ -70,6 +70,7 @@ function runVS(hObject,eventdata, type)
             
             set(handles.txtRftVoxelNum_glm, 'String', handles.voxel_num);
             set(handles.txtRftDF_glm, 'String', handles.df);
+    end
             
     guidata(hObject, handles);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');

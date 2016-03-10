@@ -1,8 +1,7 @@
 function runRFT( hObject,eventdata, type )
-
     handles = guidata(hObject);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy...');
-    image_dims = get(handles.image_dims);
+    image_dims = handles.image_dims;
     switch type
         case 'lm'
             serach_vol = get(handles.txtRftSearchVol_lm, 'String');
@@ -23,11 +22,11 @@ function runRFT( hObject,eventdata, type )
     oldTValues = old_cData.tValues;
     fieldn = fieldnames(oldTValues);
     for f =1:length(fieldn)
-        field = fieldn(f);
+        field = fieldn{f};
         stat_mat = eval(['oldTValues.' field]);
-        correctd_mat = VoxelStatsDoRFT(stat_mat, image_dims, serach_vol, ...
-            voxel_num, fwhm, df, 0.05, clus_th);
-        eval(['tValues_RFT.' field ' = correctd_mat']);
+        correctd_mat = VoxelStatsDoRFT(stat_mat, image_dims, str2num(serach_vol), ...
+            str2num(voxel_num), str2num(fwhm), str2num(df), 0.05, str2num(clus_th));
+        eval(['tValues_RFT.' field ' = correctd_mat;']);
     end
     
     old_cData.tValues_RFT = tValues_RFT;
