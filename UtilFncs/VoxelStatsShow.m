@@ -1,4 +1,4 @@
-function VoxelStatsShow( stat_mat, image_dims )
+function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
 
     figure_layout_width_slices = 4;
     figure_layout_height_slices = 3;
@@ -6,11 +6,18 @@ function VoxelStatsShow( stat_mat, image_dims )
     image_slices_n = image_dims(1);
     image_height_n = image_dims(2);
     image_width_n = image_dims(3);
+    
+    slice_length = voxel_dims(1);
+    voxel_height = voxel_dims(2);
+    voxel_width = voxel_dims(3);
+    
+    image_height_n_rs = ceil(image_height_n*voxel_height);
+    image_width_n_rs = ceil(image_width_n*voxel_width);
 
     slice_start = round(image_slices_n/10);
     slices_showing_n = image_slices_n*0.8;
     slice_spacing = floor(slices_showing_n/(figure_layout_width_slices*figure_layout_height_slices));
-    image_mat = zeros(image_height_n*3, image_width_n*4);
+    image_mat = zeros(image_height_n_rs*figure_layout_height_slices, image_width_n_rs*figure_layout_width_slices);
 
     stats_mat_3d_t = reshape(stat_mat, image_width_n , image_height_n, image_slices_n);
     stats_mat_3d = permute(stats_mat_3d_t, [2,1,3]);
@@ -18,7 +25,7 @@ function VoxelStatsShow( stat_mat, image_dims )
     slices_count = 0;
     for i = 1:figure_layout_height_slices
         for j = 1:figure_layout_width_slices
-            image_mat(image_height_n*(i-1)+1:image_height_n*i,image_width_n*(j-1)+1:image_width_n*j) = stats_mat_3d(:,:,slice_start+slices_count*slice_spacing);
+            image_mat(image_height_n_rs*(i-1)+1:image_height_n_rs*i,image_width_n_rs*(j-1)+1:image_width_n_rs*j) = imresize(stats_mat_3d(:,:,slice_start+slices_count*slice_spacing), [image_height_n_rs, image_width_n_rs]);
             slices_count = slices_count +1;
         end
     end
