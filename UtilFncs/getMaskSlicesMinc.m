@@ -1,4 +1,4 @@
-function [mask_slices_n, mask_height, mask_width, mask_slices] = getMaskSlicesMinc(mask_file)
+function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = getMaskSlicesMinc(mask_file)
     mask = [];
     try
         mask = openimage(mask_file);
@@ -6,6 +6,7 @@ function [mask_slices_n, mask_height, mask_width, mask_slices] = getMaskSlicesMi
         mask_height = getimageinfo(mask, 'ImageHeight');
         mask_width = getimageinfo(mask, 'ImageWidth');
         mask_slices_t = getimages(mask, 1:mask_slices_n);
+        voxel_dims = getimageinfo(openimage(maskFile), 'Steps');
     catch
         fprintf('File reading failed for : %s \nSleeping 5s before retrying...', mask_file);
         try

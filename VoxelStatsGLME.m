@@ -1,4 +1,4 @@
-function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df] = VoxelStatsGLME( imageType, stringModel, distribution, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
+function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df, voxel_dims] = VoxelStatsGLME( imageType, stringModel, distribution, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
     functionTimer = tic;
     mainDataTable = readtable(data_file);
 
@@ -27,7 +27,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
     end
 
     %%Get Mask data
-    [slices, image_height, image_width, mask_slices] = readMaskSlices(imageType, mask_file);
+    [slices, image_height, image_width, mask_slices, voxel_dims] = readMaskSlices(imageType, mask_file);
 
     %%Get info from Voxel files.
     image_elements = image_height * image_width;

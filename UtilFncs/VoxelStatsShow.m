@@ -1,7 +1,7 @@
 function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
 
-    figure_layout_width_slices = 4;
-    figure_layout_height_slices = 3;
+    figure_layout_width_slices = 6;
+    figure_layout_height_slices = 4;
 
     image_slices_n = image_dims(1);
     image_height_n = image_dims(2);
