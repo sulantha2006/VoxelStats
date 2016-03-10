@@ -22,8 +22,9 @@ function VoxelStatsShow( stat_mat, image_dims )
             slices_count = slices_count +1;
         end
     end
-
-    imagesc(image_mat); 
+    
+    figure('Name','Voxel Stats Show')
+    imagesc(rot90(image_mat,2)); 
     colorbar; colormap(spectral(256));
     axis equal; axis off;  
     background='white';
