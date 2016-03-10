@@ -1,9 +1,13 @@
-function saveRes( hObject,eventdata, type )
+function viewRes( hObject,eventdata, type )
     handles = guidata(hObject);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy.');
-    imageType_s = get(handles.chooseImageType, 'String');
-    imageType = imageType_s{get(handles.chooseImageType, 'Value')};
     maskFile = get(handles.txtMaskFile, 'String');
+    image_steps = getimageinfo(openimage(maskFile), 'Steps');
+    voxel_dims = [image_steps(3), image_steps(2), image_steps(1)];
+    
+    image_dimsizes = getimageinfo(openimage(maskFile), 'DimSizes');
+    image_dims = [image_dimsizes(2), image_dimsizes(3), image_dimsizes(4)];
+    
     switch type
         case 'lm'
             est_s = get(handles.chooseEst_lm, 'String');
@@ -22,19 +26,7 @@ function saveRes( hObject,eventdata, type )
             est = est_s{get(handles.chooseEst_roc, 'Value')};
             data = eval(['handles.c_data.' est]);
     end
-    switch imageType
-        case 'minc'
-            [fileName, dirName] = uiputfile({'*.mnc'}, 'Save As');
-            fullFilePath = [dirName fileName];
-            set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy...');
-            VoxelStatsWriteMinc(data, fullFilePath, maskFile);
-        case 'nifty'
-            [fileName, dirName] = uiputfile({'*.nii'}, 'Save As');
-            fullFilePath = [dirName fileName];
-            set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy...');
-            VoxelStatsWriteNifti(data, fullFilePath, maskFile);
-    end
+    VoxelStatsShow(data, image_dims, voxel_dims);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');
-
 end
 
