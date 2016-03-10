@@ -2,7 +2,9 @@ function viewRes( hObject,eventdata, type )
     handles = guidata(hObject);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy.');
     maskFile = get(handles.txtMaskFile, 'String');
-    [~, ~, ~, ~, image_steps] = getMaskSlices(maskFile);
+    imageType_s = get(handles.chooseImageType, 'String');
+    imageType = imageType_s{get(handles.chooseImageType, 'Value')};
+    [~, ~, ~, ~, image_steps] = getMaskSlices(imageType, maskFile);
     voxel_dims = [image_steps(3), image_steps(2), image_steps(1)];
     
     image_dimsizes = getimageinfo(openimage(maskFile), 'DimSizes');
