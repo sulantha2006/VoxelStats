@@ -1,4 +1,4 @@
-function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = getMaskSlicesMinc(mask_file)
+function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims, slices_data] = getMaskSlicesMinc(mask_file)
     mask = [];
     try
         mask = openimage(mask_file);
@@ -22,5 +22,6 @@ function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = get
         fprintf('Done...\n');
     end
     mask_slices = mask_slices_t > 0.9;
+    slices_data = mask_slices_t;
     closeimage(mask);
 end

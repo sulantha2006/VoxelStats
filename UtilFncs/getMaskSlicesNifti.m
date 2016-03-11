@@ -1,4 +1,4 @@
-function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = getMaskSlicesNifti(mask_file)
+function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims, slices_data] = getMaskSlicesNifti(mask_file)
     mask = [];
     try
         mask = load_nii(mask_file);
@@ -22,5 +22,6 @@ function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims] = get
         fprintf('Done...\n');
     end
     mask_slices = mask_slices_t > 0;
+    slices_data = mask_slices_t;
     clear mask;
 end

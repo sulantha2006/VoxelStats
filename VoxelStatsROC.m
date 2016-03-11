@@ -9,7 +9,7 @@ function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupC
     end
 
     %%Get Mask data
-    [slices, image_height, image_width, mask_slices, voxel_dims] = readMaskSlices(imageType, mask_file);
+    [slices, image_height, image_width, mask_slices, voxel_dims, slices_data] = readMaskSlices(imageType, mask_file);
     image_elements = image_height * image_width;
     switch imageType
         case {'mnc','MNC', 'minc', 'MINC'}

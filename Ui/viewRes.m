@@ -4,11 +4,10 @@ function viewRes( hObject,eventdata, type )
     maskFile = get(handles.txtMaskFile, 'String');
     imageType_s = get(handles.chooseImageType, 'String');
     imageType = imageType_s{get(handles.chooseImageType, 'Value')};
-    [~, ~, ~, ~, image_steps] = readMaskSlices(imageType, maskFile);
+    [image_slices, image_height, image_width, ~, image_steps, slices_data] = readMaskSlices(imageType, maskFile);
     voxel_dims = [image_steps(3), image_steps(2), image_steps(1)];
-    
-    image_dimsizes = getimageinfo(openimage(maskFile), 'DimSizes');
-    image_dims = [image_dimsizes(2), image_dimsizes(3), image_dimsizes(4)];
+
+    image_dims = [image_slices, image_height, image_width];
     
     switch type
         case 'lm'
