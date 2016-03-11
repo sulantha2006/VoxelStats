@@ -1,7 +1,7 @@
 function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupColumnName, mask_file, includeString, multiVarOperation )
     functionTimer = tic;
-    mainDataTable = readtable(inputTable);
-
+    mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
+    
     if length(includeString) > 0
         incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
         eval(['mainDataTable_rows = ' incStr ';']);

@@ -72,7 +72,7 @@ function ImHandle = openimage (filename, mode)
 %-----------------------------------------------------------------------------
 
 
-error (nargchk (1, 2, nargin));
+narginchk (1, 2);
 
 % disp (['Looking for ' filename]);
 if exist (filename) ~= 2

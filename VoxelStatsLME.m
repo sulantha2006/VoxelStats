@@ -1,6 +1,6 @@
 function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_num, df, voxel_dims] = VoxelStatsLME( imageType, stringModel, data_file, mask_file, multivalueVariables, categoricalVars, includeString, multiVarOperationMap )
     functionTimer = tic;
-    mainDataTable = readtable(data_file);
+    mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
 
     if length(includeString) > 0
         incStr = strrep(includeString, 'mdt.', 'mainDataTable.');
