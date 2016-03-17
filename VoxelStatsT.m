@@ -1,4 +1,4 @@
-function [ result_h, result_p, result_t ] = VoxelStatsT( imageType, inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
+function [ c_struct ] = VoxelStatsT( imageType, inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
     mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
     
     if length(includeString) > 0
@@ -44,5 +44,7 @@ function [ result_h, result_p, result_t ] = VoxelStatsT( imageType, inputTable, 
     
     result_t = zeros(image_elements, slices);
     result_t(mask_slices) = t.tstat;
-
+    
+    c_struct = struct('hValues', result_h, 'pValues', result_p, 'tValues', result_t);
+    
 end

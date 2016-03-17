@@ -15,6 +15,18 @@ function runRFT( hObject,eventdata, type )
             fwhm = get(handles.txtRftFWHM_glm, 'String');
             df = get(handles.txtRftDF_glm, 'String');
             clus_th = get(handles.txtRftClusterTh_glm, 'String');
+        case 't'
+            serach_vol = get(handles.txtRftSearchVol_t, 'String');
+            voxel_num = get(handles.txtRftVoxelNum_t, 'String');
+            fwhm = get(handles.txtRftFWHM_t, 'String');
+            df = get(handles.txtRftDF_t, 'String');
+            clus_th = get(handles.txtRftClusterTh_t, 'String');
+        case 'pt'
+            serach_vol = get(handles.txtRftSearchVol_pt, 'String');
+            voxel_num = get(handles.txtRftVoxelNum_pt, 'String');
+            fwhm = get(handles.txtRftFWHM_pt, 'String');
+            df = get(handles.txtRftDF_pt, 'String');
+            clus_th = get(handles.txtRftClusterTh_pt, 'String');
     end
     
     tValues_RFT=[];
@@ -31,7 +43,15 @@ function runRFT( hObject,eventdata, type )
     
     old_cData.tValues_RFT = tValues_RFT;
     handles.c_data = old_cData;
-    set(handles.chooseEst_lm, 'String', fieldnames(old_cData));
+    switch type
+        case 'lm'
+            set(handles.chooseEst_lm, 'String', fieldnames(old_cData));
+        case 'glm'
+            set(handles.chooseEst_glm, 'String', fieldnames(old_cData));
+        case 't'
+            set(handles.chooseEst_t, 'String', fieldnames(old_cData));
+        case 'pt'
+            set(handles.chooseEst_pt, 'String', fieldnames(old_cData));
     guidata(hObject, handles);
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');
 

@@ -53,6 +53,20 @@ function runVS(hObject,eventdata, type)
             c_struct = VoxelStatsROC(imageType, csvFile, dataCol, groupingCol, maskFile, filterStr);
             set(handles.chooseEst_roc,'Value',1); 
             set(handles.chooseEst_roc, 'String', fieldnames(c_struct));
+        case 't'
+            dataCol = get(handles.txtDataCol_t, 'String');
+            groupingCol = get(handles.txtGroupCol_t, 'String');
+            Group1 = get(handles.txtGroup1_t, 'String');
+            Group2 = get(handles.txtGroup2_t, 'String');
+            c_struct = VoxelStatsT(imageType, csvFile, dataCol, groupingCol, Group1, Group2, filterStr, maskFile);
+            set(handles.chooseEst_t,'Value',1); 
+            set(handles.chooseEst_t, 'String', fieldnames(c_struct));
+        case 'pt'
+            ContrastCol1 = get(handles.txtContrastCol1_pt, 'String');
+            ContrastCol2 = get(handles.txtContrastCol1_pt, 'String');
+            c_struct = VoxelStatsPairedT(imageType, csvFile, ContrastCol1, ContrastCol2, filterStr, maskFile);
+            set(handles.chooseEst_pt,'Value',1); 
+            set(handles.chooseEst_pt, 'String', fieldnames(c_struct));
     end
     handles.c_data = c_struct;
     switch type

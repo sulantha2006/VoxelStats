@@ -29,6 +29,16 @@ function viewRes( hObject,eventdata, type )
             est = est_s{get(handles.chooseEst_roc, 'Value')};
             data = eval(['handles.c_data.' est]);
             template = get(handles.txtTemplate_roc, 'String');
+        case 't'
+            est_s = get(handles.chooseEst_t, 'String');
+            est = est_s{get(handles.chooseEst_t, 'Value')};
+            data = eval(['handles.c_data.' est]);
+            template = get(handles.txtTemplate_t, 'String');
+        case 'pt'
+            est_s = get(handles.chooseEst_pt, 'String');
+            est = est_s{get(handles.chooseEst_pt, 'Value')};
+            data = eval(['handles.c_data.' est]);
+            template = get(handles.txtTemplate_pt, 'String');
     end
     if strcmp(template, '')
         VoxelStatsShow(data, image_dims, voxel_dims);

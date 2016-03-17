@@ -120,7 +120,7 @@ function VoxelStatsShow( stat_mat, image_dims, voxel_dims)
     set( cb, 'YDir', 'reverse' );
     caxis([clim_down -0.02])
     
-    set(fig,'Color',[0.1 0.1 0.1],'InvertHardcopy','off');
+    set(fig,'Color',[0.9 0.9 0.9],'InvertHardcopy','off');
     
     
 %     p7 = subplot(2,7,[8,9,10]);
