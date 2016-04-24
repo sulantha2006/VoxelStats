@@ -1,4 +1,4 @@
-function [ c_struct ] = VoxelStatsT( imageType, inputTable, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
+function [ c_struct ] = VoxelStatsT( imageType, data_file, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
     mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
     
     if length(includeString) > 0

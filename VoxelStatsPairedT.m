@@ -1,4 +1,4 @@
-function [ c_struct ] = VoxelStatsPairedT( imageType, inputTable, contrastColumnId1, contrastColumnId2, includeString, mask_file )
+function [ c_struct ] = VoxelStatsPairedT( imageType, data_file, contrastColumnId1, contrastColumnId2, includeString, mask_file )
     mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
     
     if length(includeString) > 0
@@ -31,7 +31,7 @@ function [ c_struct ] = VoxelStatsPairedT( imageType, inputTable, contrastColumn
     result_p(mask_slices) = p;
     
     result_t = zeros(image_elements, slices);
-    result_t(mask_slices) = t;
+    result_t(mask_slices) = t.tstat;
     
     c_struct = struct('hValues', result_h, 'pValues', result_p, 'tValues', result_t);
 
