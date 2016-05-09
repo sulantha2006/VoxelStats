@@ -10,7 +10,8 @@
              
                     Permission to use, and copy this software and its documentation for any non-commercial purpose and without fee
                     is hereby granted, provided that the above copyright notice appear in all copies.
-                    Comercial, government or military organizations who wish to use the software needs permission from the author.                           Any Modification and redistribution need to be authorized by the author. 
+                    Comercial, government or military organizations who wish to use the software needs permission from the author.
+                    Any Modification and redistribution need to be authorized by the author. 
                     External library packages bundled with this software are covered 
                     and goverened by thier own copyright notice. 
                     The authors and McGill University make no representations about the suitability of this
