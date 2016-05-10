@@ -1,4 +1,4 @@
-    VoxelStats v1.0 - voxelwise genaralized linear modeling for MINC2, Nifti-1 and ANALYZE images. 
+    VoxelStats - A MATLAB package for multi-modal voxel-wise brain image analysis. 
     COPYRIGHT:      Copyright 2015  Sulantha Mathotaarachchi
                     Translational Neuroimaging Laboratory,
                     McGill University Research Center for Studies in Aging,
@@ -21,6 +21,7 @@
     External library packages:
     EMMA Toolkit - https://github.com/BIC-MNI/emma
     Tools for NIfTI and ANALYZE image - http://www.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
+    stat_threshold (SurfStat) - http://www.math.mcgill.ca/keith/surfstat/
 
     Package requirements for MINC operations: 
     MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
