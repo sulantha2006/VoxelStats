@@ -52,8 +52,9 @@ function runRFT( hObject,eventdata, type )
             set(handles.chooseEst_t, 'String', fieldnames(old_cData));
         case 'pt'
             set(handles.chooseEst_pt, 'String', fieldnames(old_cData));
-    guidata(hObject, handles);
+    end
     set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Idle.');
+    guidata(hObject, handles);
 
 end
 
