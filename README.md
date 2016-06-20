@@ -25,4 +25,9 @@
 
     Package requirements for MINC operations: 
     MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
+    
+    Publication: http://journal.frontiersin.org/article/10.3389/fninf.2016.00020/full
+    
+    Citation:
+    Mathotaarachchi, S., Wang, S., Shin, M., Pascoal, T.A., Andrea, L., Kang, M.S., Beaudry, T., Fonov, V.S., Gauthier, S., Labbe, A., Rosa-neto, P., 2016. VoxelStats: A MATLAB package for multi-modal voxel-wise brain image analysis. Fontiers in Neuroinformatics 10, 20. doi:10.3389/fninf.2016.00020
 
