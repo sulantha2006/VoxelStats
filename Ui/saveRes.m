@@ -36,7 +36,7 @@ function saveRes( hObject,eventdata, type )
             fullFilePath = [dirName fileName];
             set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy...');
             VoxelStatsWriteMinc(data, fullFilePath, maskFile);
-        case 'nifty'
+        case 'nifti'
             [fileName, dirName] = uiputfile({'*.nii'}, 'Save As');
             fullFilePath = [dirName fileName];
             set(handles.lblStatus, 'String', 'VoxelStats v1.1 - Busy...');
