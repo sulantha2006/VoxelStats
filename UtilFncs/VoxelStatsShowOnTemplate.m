@@ -18,9 +18,9 @@ function VoxelStatsShowOnTemplate( stat_mat, template_file, imageType )
     stats_mat_3d_t = reshape(stat_mat, image_width_n , image_height_n, image_slices_n);
     stats_mat_3d = permute(stats_mat_3d_t, [2,1,3]);
     
-    xSlice_avg = imresize(squeeze(mean(stats_mat_3d, 1)), [image_width_n_rs, image_slices_n_rs]);
-    ySlice_avg = imresize(squeeze(mean(stats_mat_3d, 2)), [image_height_n_rs, image_slices_n_rs]);
-    zSlice_avg = imresize(squeeze(mean(stats_mat_3d, 3)), [image_height_n_rs, image_width_n_rs]);
+    xSlice_avg = imresize(squeeze(nanmean(stats_mat_3d, 1)), [image_width_n_rs, image_slices_n_rs]);
+    ySlice_avg = imresize(squeeze(nanmean(stats_mat_3d, 2)), [image_height_n_rs, image_slices_n_rs]);
+    zSlice_avg = imresize(squeeze(nanmean(stats_mat_3d, 3)), [image_height_n_rs, image_width_n_rs]);
     
     template_mat_3d_t = reshape(template_data, image_width_n , image_height_n, image_slices_n);
     template_mat_3d = permute(template_mat_3d_t, [2,1,3]);
