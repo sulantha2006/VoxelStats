@@ -1,4 +1,7 @@
-    VoxelStats - A MATLAB package for multi-modal voxel-wise brain image analysis. 
+VoxelStats - A MATLAB package for multi-modal voxel-wise brain image analysis. 
+
+Wiki/User Guide - https://github.com/sulantha2006/VoxelStats/wiki
+    
     COPYRIGHT:      Copyright 2015  Sulantha Mathotaarachchi
                     Translational Neuroimaging Laboratory,
                     McGill University Research Center for Studies in Aging,
