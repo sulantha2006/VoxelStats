@@ -63,7 +63,7 @@ function runVS(hObject,eventdata, type)
             set(handles.chooseEst_t, 'String', fieldnames(c_struct));
         case 'pt'
             ContrastCol1 = get(handles.txtContrastCol1_pt, 'String');
-            ContrastCol2 = get(handles.txtContrastCol1_pt, 'String');
+            ContrastCol2 = get(handles.txtContrastCol2_pt, 'String');
             c_struct = VoxelStatsPairedT(imageType, csvFile, ContrastCol1, ContrastCol2, filterStr, maskFile);
             set(handles.chooseEst_pt,'Value',1); 
             set(handles.chooseEst_pt, 'String', fieldnames(c_struct));
