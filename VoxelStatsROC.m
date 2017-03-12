@@ -27,6 +27,7 @@ function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupC
     thStruct = zeros(numOfModels,1);
     tprStruct = zeros(numOfModels,1);
     fprStruct = zeros(numOfModels,1);
+    aucStruct = zeros(numOfModels,1);
     
     %%Do multi value operations if specified
     if nargin > 6 
@@ -51,15 +52,18 @@ function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupC
     slices_th = zeros(numberOfModels_t, 1);
     slices_tpr = zeros(numberOfModels_t, 1);
     slices_fpr = zeros(numberOfModels_t, 1);
+    slices_auc = zeros(numberOfModels_t, 1);
     parfor k = 1:numberOfModels_t
         roc = parForROC(groupingData, sliceData(:,k));
         slices_th(k) = roc.th;
         slices_tpr(k) = roc.tpr;
         slices_fpr(k) = roc.fpr;
+        slices_auc(k) = roc.auc;
     end
     thStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_th;
     tprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_tpr;
     fprStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_fpr;
+    aucStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_auc;
     toc(artificialSliceTimer)
     end
     fprintf('Analysis Done - ');
@@ -68,8 +72,9 @@ function [ c_struct ] = VoxelStatsROC( imageType, inputTable, dataColumn, groupC
     finalTHStruct=getVoxelStructFromMask(thStruct, mask_slices, image_elements, slices);
     finalTPRStruct=getVoxelStructFromMask(tprStruct, mask_slices, image_elements, slices);
     finalFPRStruct=getVoxelStructFromMask(fprStruct, mask_slices, image_elements, slices);
+    finalAUCStruct=getVoxelStructFromMask(aucStruct, mask_slices, image_elements, slices);
 
-    c_struct = struct('thValues', finalTHStruct, 'tprValues', finalTPRStruct, 'fprValues', finalFPRStruct);
+    c_struct = struct('thValues', finalTHStruct, 'tprValues', finalTPRStruct, 'fprValues', finalFPRStruct, 'AUCValues', finalAUCStruct);
     fprintf('Total - ');
     toc(functionTimer)
     
@@ -81,6 +86,6 @@ function [ roc ] = parForROC(groupingData, sliceData)
     
     dist = sqrt(fpr.^2 + (1 - tpr).^2);
     [best, best_one_index] = min(dist);
-    roc = struct('th',th(best_one_index), 'tpr',tpr(best_one_index), 'fpr', fpr(best_one_index));
+    roc = struct('th',th(best_one_index), 'tpr',tpr(best_one_index), 'fpr', fpr(best_one_index), 'auc', auc);
         
 end
