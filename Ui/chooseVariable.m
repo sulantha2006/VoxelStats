@@ -32,8 +32,8 @@ handles = guidata(hObject);
         str_selection = str_selection_s{get(handles.chooseEst_t, 'Value')};
         if ~strcmp(str_selection, '')
             intVars = eval(['handles.c_data.' str_selection]);
-            newfields = fieldnames(intVars);
-            set(handles.chooseVarName_t, 'String', newfields);
+            %newfields = fieldnames(intVars);
+            %set(handles.chooseVarName_t, 'String', newfields);
         end
     end
     if (strcmp(type,'pt'))
@@ -41,8 +41,8 @@ handles = guidata(hObject);
         str_selection = str_selection_s{get(handles.chooseEst_pt, 'Value')};
         if ~strcmp(str_selection, '')
             intVars = eval(['handles.c_data.' str_selection]);
-            newfields = fieldnames(intVars);
-            set(handles.chooseVarName_pt, 'String', newfields);
+            %newfields = fieldnames(intVars);
+            %set(handles.chooseVarName_pt, 'String', newfields);
         end
     end
 end
