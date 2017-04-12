@@ -17,7 +17,7 @@ Publication: http://journal.frontiersin.org/article/10.3389/fninf.2016.00020/ful
     any non-commercial purpose and without fee is hereby granted, provided
     that the above copyright notice appears in all copies. 
     External library packages bundled with this software are covered and 
-    governed by thier own copyright notice.
+    governed by their own copyright notice.
 
     COMMERCIAL, GOVERNMENT OR MILITARY ORGANIZATIONS WHO WISH TO USE THE 
     SOFTWARE SHOULD REQUEST PERMISSION FROM THE AUTHORS.
