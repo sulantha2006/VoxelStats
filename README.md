@@ -15,9 +15,9 @@ Publication: http://journal.frontiersin.org/article/10.3389/fninf.2016.00020/ful
 
     Permission to use, and copy this software and its documentation for 
     any non-commercial purpose and without fee is hereby granted, provided
-    that the above copyright notice appear in all copies. 
+    that the above copyright notice appears in all copies. 
     External library packages bundled with this software are covered and 
-    goverened by thier own copyright notice.
+    governed by thier own copyright notice.
 
     COMMERCIAL, GOVERNMENT OR MILITARY ORGANIZATIONS WHO WISH TO USE THE 
     SOFTWARE SHOULD REQUEST PERMISSION FROM THE AUTHORS.
