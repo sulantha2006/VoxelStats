@@ -33,5 +33,6 @@
     				Tools for NIfTI and ANALYZE image - http://www.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image
     				stat_threshold (SurfStat) - http://www.math.mcgill.ca/keith/surfstat/
 
-    				Package requirements for MINC operations: 
+    				
+					Package requirements for MINC operations: 
     				MINC-TOOLKIT - https://github.com/BIC-MNI/minc-toolkit
