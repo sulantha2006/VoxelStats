@@ -21,6 +21,10 @@ function saveRes( hObject,eventdata, type )
             est_s = get(handles.chooseEst_roc, 'String');
             est = est_s{get(handles.chooseEst_roc, 'Value')};
             data = eval(['handles.c_data.' est]);
+        case 'propt'
+            est_s = get(handles.chooseEst_propt, 'String');
+            est = est_s{get(handles.chooseEst_propt, 'Value')};
+            data = eval(['handles.c_data.' est]);
         case 't'
             est_s = get(handles.chooseEst_t, 'String');
             est = est_s{get(handles.chooseEst_t, 'Value')};

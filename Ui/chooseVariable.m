@@ -27,6 +27,15 @@ handles = guidata(hObject);
             %set(handles.chooseVarName_roc, 'String', newfields);
         end
     end
+    if (strcmp(type,'propt'))
+        str_selection_s = get(handles.chooseEst_propt, 'String');
+        str_selection = str_selection_s{get(handles.chooseEst_propt, 'Value')};
+        if ~strcmp(str_selection, '')
+            intVars = eval(['handles.c_data.' str_selection]);
+            %newfields = fieldnames(intVars);
+            %set(handles.chooseVarName_roc, 'String', newfields);
+        end
+    end
     if (strcmp(type,'t'))
         str_selection_s = get(handles.chooseEst_t, 'String');
         str_selection = str_selection_s{get(handles.chooseEst_t, 'Value')};

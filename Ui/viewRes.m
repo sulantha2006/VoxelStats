@@ -29,6 +29,11 @@ function viewRes( hObject,eventdata, type )
             est = est_s{get(handles.chooseEst_roc, 'Value')};
             data = eval(['handles.c_data.' est]);
             template = get(handles.txtTemplate_roc, 'String');
+        case 'propt'
+            est_s = get(handles.chooseEst_propt, 'String');
+            est = est_s{get(handles.chooseEst_propt, 'Value')};
+            data = eval(['handles.c_data.' est]);
+            template = get(handles.txtTemplate_propt, 'String');
         case 't'
             est_s = get(handles.chooseEst_t, 'String');
             est = est_s{get(handles.chooseEst_t, 'Value')};
