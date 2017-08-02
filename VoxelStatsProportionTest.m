@@ -52,7 +52,7 @@ function [ c_struct ] = VoxelStatsProportionTest( imageType, inputTable, dataCol
     slices_chi2p = zeros(numberOfModels_t, 1);
     slices_fisherp = zeros(numberOfModels_t, 1);
     
-    parfor k = 1:numberOfModels_t
+    for k = 1:numberOfModels_t
         propTest = parForPropTest(groupingData, sliceData(:,k));
         slices_chi2(k) = propTest.chi2;
         slices_chi2p(k) = propTest.chi2p;
@@ -78,8 +78,15 @@ end
 
 function [ propTest ] = parForPropTest(groupingData, sliceData)
     [tbl,chi2,chi2p,labels] = crosstab(groupingData, round(sliceData, 0));
-    [fishh,fisherp,stats] = fishertest(tbl);
+    if isnan(chi2)
+        propTest = struct('chi2', 0, 'chi2p', 1, 'fisherp', 1);
+    else
+        [fishh,fisherp,stats] = fishertest(tbl);
+        propTest = struct('chi2', chi2, 'chi2p', chi2p, 'fisherp', fisherp);
+    end
     
-    propTest = struct('chi2', chi2, 'chi2p', chi2p, 'fisherp', fisherp);
+    
+    
+    
         
 end

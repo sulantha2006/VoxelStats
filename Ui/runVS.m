@@ -68,8 +68,8 @@ function runVS(hObject,eventdata, type)
             set(handles.chooseEst_pt,'Value',1); 
             set(handles.chooseEst_pt, 'String', fieldnames(c_struct));
         case 'propt'
-            dataCol = get(handles.txtDataCol_roc, 'String');
-            groupingCol = get(handles.txtGroupCol_roc, 'String');
+            dataCol = get(handles.txtDataCol_propt, 'String');
+            groupingCol = get(handles.txtGroupCol_propt, 'String');
             c_struct = VoxelStatsProportionTest(imageType, csvFile, dataCol, groupingCol, maskFile, filterStr);
             set(handles.chooseEst_propt,'Value',1); 
             set(handles.chooseEst_propt, 'String', fieldnames(c_struct));
