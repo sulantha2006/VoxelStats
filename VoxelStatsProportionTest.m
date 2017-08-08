@@ -52,7 +52,7 @@ function [ c_struct ] = VoxelStatsProportionTest( imageType, inputTable, dataCol
     slices_chi2p = zeros(numberOfModels_t, 1);
     slices_fisherp = zeros(numberOfModels_t, 1);
     
-    for k = 1:numberOfModels_t
+    parfor k = 1:numberOfModels_t
         propTest = parForPropTest(groupingData, sliceData(:,k));
         slices_chi2(k) = propTest.chi2;
         slices_chi2p(k) = propTest.chi2p;
