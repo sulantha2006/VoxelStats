@@ -67,6 +67,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
     totalDataSlices = 200;
     tStruct = zeros(numOfModels,nVarsInRegression);
     eStruct = zeros(numOfModels,nVarsInRegression);
+    seStruct = zeros(numOfModels,nVarsInRegression);
     fprintf('Analysis Starting: \n');
     analysisTimer = tic;
     %Slicing data
@@ -81,13 +82,16 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
         end
         slices_t = zeros(numberOfModels_t, nVarsInRegression);
         slices_e = zeros(numberOfModels_t, nVarsInRegression);
+        slices_se = zeros(numberOfModels_t, nVarsInRegression);
         parfor k = 1:numberOfModels_t
             lm = parForVoxelLM(dataTable, stringModel, k, categoricalVars, multivalueVariables, multiVarMapForSlice);
             slices_t(k, :) = lm.Coefficients.tStat';
             slices_e(k, :) = lm.Coefficients.Estimate';
+            slices_se(k, :) = lm.Coefficients.SE';
         end
         tStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_t;
         eStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_e;
+        seStruct((((sliceCount-1)*blockSize)+1):(((sliceCount-1)*blockSize)+numberOfModels_t),:) = slices_se;
         toc(artificialSliceTimer)
     end
     fprintf('Analysis Done - ');
@@ -97,11 +101,13 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
     image_width_p = image_width;
     finalTStruct=[];
     finalEStruct=[];
+    finalSEStruct=[];
     for x = 1:length(varsInRegressionNames)
         finalTStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(tStruct(:,x), mask_slices, image_elements, slices);
         finalEStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(eStruct(:,x), mask_slices, image_elements, slices);
+        finalSEStruct.(regexprep(varsInRegressionNames{x}, '\W', '')) = getVoxelStructFromMask(seStruct(:,x), mask_slices, image_elements, slices);
     end
-    c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct);
+    c_struct = struct('tValues', finalTStruct, 'eValues', finalEStruct, 'seValues', finalSEStruct);
     coeff_vars = varsInRegressionNames;
     fprintf('Total - ');
     toc(functionTimer)
