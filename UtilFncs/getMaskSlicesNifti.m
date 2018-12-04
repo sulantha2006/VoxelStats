@@ -23,7 +23,7 @@ function [mask_slices_n, mask_height, mask_width, mask_slices, voxel_dims, slice
             end
         end
     end
-    mask_slices = mask_slices_t > 0;
+    mask_slices = mask_slices_t > 0.5;
     slices_data = mask_slices_t;
     clear mask;
 end
