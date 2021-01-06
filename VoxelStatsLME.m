@@ -40,7 +40,7 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
     dataTable = mainDataTable(:,usedVars);
     fprintf('Total files read - %d - ', height(dataTable));
     %%Do multi value operations if specified
-    if nargin > 7 
+    if nargin > 7
         operationKeys = multiVarOperationMap.keys;
         for k_idx = 1:length(operationKeys)
             operation = eval([' multiVarOperationMap(''', operationKeys{k_idx}, ''');']);
@@ -52,14 +52,19 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
 
     %%Run Analysis
     % Run only one voxel to get information
-    templm = parForVoxelLM(dataTable, stringModel, 1, categoricalVars, multivalueVariables, multiVarMap);
+    k = 1
+    templm = parForVoxelLM(dataTable, stringModel, k, categoricalVars, multivalueVariables, multiVarMap);
+    while (strcmp(templm, 'None'))
+      k = k + 1;
+      templm = parForVoxelLM(dataTable, stringModel, k, categoricalVars, multivalueVariables, multiVarMap);
+    end
     varsInRegressionNames = templm.CoefficientNames;
     nVarsInRegression = length(varsInRegressionNames);
     %%Done one voxel fitlm
-    
+
     voxel_num = sum(sum(mask_slices));
-    df = templm.DFE;
-    
+    df = templm.DFE
+
     %Number of Analysis
     numOfModels = sum(sum(mask_slices));
     totalDataSlices = 200;
@@ -83,6 +88,9 @@ function [ c_struct, slices_p, image_height_p, image_width_p, coeff_vars, voxel_
         slices_se = zeros(numberOfModels_t, nVarsInRegression);
         parfor k = 1:numberOfModels_t
             lm = parForVoxelLM(dataTable, stringModel, k, categoricalVars, multivalueVariables, multiVarMapForSlice);
+            if (strcmp(lm,'None'))
+              continue;
+            end
             slices_t(k, :) = lm.Coefficients.tStat';
             slices_e(k, :) = lm.Coefficients.Estimate';
             slices_se(k, :) = lm.Coefficients.SE';
@@ -115,14 +123,17 @@ function [ model ] = parForVoxelLM(table, formula, k, categoricalVars, multivalu
     for varName = multivalueVariables
         varData = multiVarMap(varName{1,1});
         str_cnt = strcat('table.',varName{1,1},' = varData(:,',num2str(k),');');
-        eval([str_cnt]);   
-    end  
-    if length(categoricalVars{1}) > 0         
-        model = fitlme(table, formula, 'CategoricalVars', categoricalVars);
-    else
-        model = fitlme(table, formula);
+        eval([str_cnt]);
     end
-        
+    try
+      if length(categoricalVars{1}) > 0
+          model = fitlme(table, formula, 'CategoricalVars', categoricalVars);
+      else
+          model = fitlme(table, formula);
+      end
+    catch ME
+      fprintf('Exception occured - values for the voxel forced 0. Error %s: \n', ME.message);
+      model = 'None';
+    end
+
 end
-
-
