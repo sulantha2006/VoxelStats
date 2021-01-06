@@ -128,7 +128,7 @@ function [ model ] = parForVoxelLM(table, formula, distribution, k, categoricalV
         str_cnt = strcat('table.',varName{1,1},' = varData(:,',num2str(k),');');
         eval([str_cnt]);
     end
-    try:
+    try
       if length(categoricalVars{1}) > 0
           model = fitglme(table, formula, 'Distribution', distribution, 'CategoricalVars', categoricalVars);
       else
