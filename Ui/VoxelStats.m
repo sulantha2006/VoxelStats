@@ -271,6 +271,9 @@ function VoxelStats()
     txtGroup2_t = uicontrol('Tag', 'txtGroup2_t', 'Parent', tab4, 'Style', 'edit', ...
     'units', 'normalized', 'Position', [0.60 0.65 0.2 0.09], 'HorizontalAlignment', 'left') ;
 
+    chooseWelch_t = uicontrol('Tag', 'chooseWelch_t', 'Parent', tab4, 'Style', 'checkbox', ...
+    'String', 'Welch t-test', 'units', 'normalized', 'Position', [0.05 0.55 0.3 0.09]) ;
+
     runVS_t = uicontrol('Tag', 'runVS_t','Parent', tab4, 'Style', 'pushbutton', ...
     'String', 'Run','units', 'normalized', 'Position', [0.75 0.45 0.2 0.1], 'CallBack', {@runVS, 't'}) ;
 
