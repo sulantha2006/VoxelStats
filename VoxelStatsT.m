@@ -1,4 +1,4 @@
-function [ c_struct ] = VoxelStatsT( imageType, data_file, dataColumn, groupColumnName, group1, group2, includeString, mask_file )
+function [ c_struct ] = VoxelStatsT( imageType, data_file, dataColumn, groupColumnName, group1, group2, includeString, mask_file, welch )
     mainDataTable = readtable(data_file, 'delimiter', ',', 'readVariableNames', true);
     
     if length(includeString) > 0
@@ -33,8 +33,11 @@ function [ c_struct ] = VoxelStatsT( imageType, data_file, dataColumn, groupColu
             fprintf('Unknown Image type')
             exit
     end
-    
-    [h, p, ci, t] = ttest2(group1data, group2data);
+    if welch
+        [h, p, ci, t] = ttest2(group1data, group2data, 'Vartype', 'unequal');
+    else 
+        [h, p, ci, t] = ttest2(group1data, group2data);
+    end
     
     result_h = zeros(image_elements, slices);
     result_h(mask_slices) = h;
