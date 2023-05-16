@@ -58,7 +58,10 @@ function runVS(hObject,eventdata, type)
             groupingCol = get(handles.txtGroupCol_t, 'String');
             Group1 = get(handles.txtGroup1_t, 'String');
             Group2 = get(handles.txtGroup2_t, 'String');
-            c_struct = VoxelStatsT(imageType, csvFile, dataCol, groupingCol, Group1, Group2, filterStr, maskFile);
+            welch = get(handles.chooseWelch_t, 'Value');
+
+            c_struct = VoxelStatsT(imageType, csvFile, dataCol, groupingCol, Group1, Group2, filterStr, maskFile, welch);
+            
             set(handles.chooseEst_t,'Value',1); 
             set(handles.chooseEst_t, 'String', fieldnames(c_struct));
         case 'pt'
